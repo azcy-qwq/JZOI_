@@ -126,7 +126,7 @@ namespace azcy{
     }
 }using namespace azcy;
 const int N=1e4+10;
-int n,k,sum[N],dp[N],num;
+int n,k,sum[N],dp[N],num=1;
 pair<int,int> a[N];
 int main(){
 //	ios::sync_with_stdio(0);
@@ -140,19 +140,22 @@ int main(){
     //     sum[i]+=sum[i-1];
     //     dbg(i,sum[i]);
     // }
-        
-    sort(a+1,a+n+1,greater<pair<int,int> >());
+    sort(a+1,a+k+1,greater<pair<int,int> >());
+    // for(int i=1;i<=k;++i){
+    //         dbg(a[i].first,a[i].second,i);
+    // }
     for(int i=n;i>=1;--i){
-        if(sum[i]<=0){
+        if(sum[i]==0){
             dp[i]=dp[i+1]+1;
             continue;
         } 
         // cout<<i<<"\n";
         for(int j=1;j<=sum[i];++j){
-            if(a[j].first<=i&&a[j].first+a[j].second-1>=i){
-                dp[i]=max(dp[i],dp[a[j].first+a[j].second]);
-                dbg(j);
+            if(dp[i+a[num].second]>dp[i]){
+                dp[i]=dp[i+a[num].second];
+                // dbg(j);
             }
+            num++;
         }
     }
     cout<<dp[1];
