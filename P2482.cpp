@@ -228,11 +228,15 @@ class chain_list{
         vector<T> data;
         vector<int> next;
         vector<int> head;
+        int tail=0;
         void push_back(T x){
+            // tail=data.size()-1;
             data.push_back(x);
+            head.push_back(tail);
             if(next.size())
-                next[next.size()-1]=next.size();
-            next.push_back(next.size());
+                next[tail]=next.size();
+            next.push_back(next.size()-1);
+            tail=data.size()-1;
         }
         chain_list(){
             push_back(0);
@@ -242,16 +246,35 @@ class chain_list{
                 cerr<<"Error:Attempt to delete node 0\n";
                 return ;
             }
-            
+            if(tail==x) tail=head[x];
+            next[head[x]]=next[x];
+            head[next[x]]=head[x];
+        }
+        int get_head(){
+            return next[0];
+        }
+        void get_next(int &x){
+            x=next[x];
+        }
+        void get_prv(int &x){
+            x=head[x];
+        }
+        int find(T x){
+            int u=get_head();
+            while(next[u]!=u){
+                if(data[u]==x) return u;
+            }
+            return -1;
         }
 };
+chain_list<char> cl_test;
 class pig_{
     protected:
-
+        chain_list<char> cards;
 
 }pig[N>>2];
 int main(){
 //	ios::sync_with_stdio(0);
     cin>>n>>m;
-
+    
 }
