@@ -153,28 +153,21 @@ main()
 	int n,m;
 	ios::sync_with_stdio(0);
 	cin.tie(0);
-//	ÄúÄúÄúÄúÄúÄúÄúÄúÄúÄúÄúÄúÄúÄúÄúÄú%%%%%%%%%%%%%%% 
-	// cin>>n>>m;
     redi(n,m);
 	for(int i=1;i<=n;i++)
         redi(a[i]);
-	// cin>>a[i];
 	build_tree(1,1,n);
 	int op,a,b,c;
 	for(int i=1;i<=m;i++)
 	{
-		// cin>>op;
         redi(op,a,b);
 		if(op==1)
 		{
             redi(c);
-			// cin>>a>>b>>c;
 			update(1,1,n,a,b,c);
 		}
 		else
 		{
-			// cin>>a>>b;
-			// cout<<find(1,1,n,a,b)<<"\n";
             put(find(1,1,n,a,b));
 		}
 	}
