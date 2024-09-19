@@ -1,87 +1,5 @@
-#ifndef _GLIBCXX_NO_ASSERT
-#include <cassert>
-#endif
-#include <cctype>
-#include <cerrno>
-#include <cfloat>
-#include <ciso646>
-#include <climits>
-#include <clocale>
-#include <cmath>
-#include <csetjmp>
-#include <csignal>
-#include <cstdarg>
-#include <cstddef>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <ctime>
-#if __cplusplus >= 201103L
-#include <ccomplex>
-#include <cfenv>
-#include <cinttypes>
-#include <cstdalign>
-#include <cstdbool>
-#include <cstdint>
-#include <ctgmath>
-#include <cwchar>
-#include <cwctype>
-#endif
-#include <algorithm>
-#include <bitset>
-#include <complex>
-#include <deque>
-#include <exception>
-#include <fstream>
-#include <functional>
-#include <iomanip>
-#include <ios>
-#include <iosfwd>
-#include <iostream>
-#include <istream>
-#include <iterator>
-#include <limits>
-#include <list>
-#include <locale>
-#include <map>
-#include <memory>
-#include <new>
-#include <numeric>
-#include <ostream>
-#include <queue>
-#include <set>
-#include <sstream>
-#include <stack>
-#include <stdexcept>
-#include <streambuf>
-#include <string>
-#include <typeinfo>
-#include <utility>
-#include <valarray>
-#include <vector>
-#if __cplusplus >= 201103L
-#include <array>
-#include <atomic>
-#include <chrono>
-#include <condition_variable>
-#include <forward_list>
-#include <future>
-#include <initializer_list>
-#include <mutex>
-#include <random>
-#include <ratio>
-#include <regex>
-#include <scoped_allocator>
-#include <system_error>
-#include <thread>
-#include <tuple>
-#include <typeindex>
-#include <type_traits>
-#include <unordered_map>
-#include <unordered_set>
-#endif
+#include<bits/stdc++.h>
 using namespace std;
-
 namespace IN
 {
 #define MAX_INPUT 25000003
@@ -320,16 +238,33 @@ public:
         return -1;
     }
 };
-chain_list<char> cl_test;
+char out_ident[N];
 class pig_
 {
 protected:
 public:
+	bool equip=0;
+    int hp=4;
     char identity;
-    chain_list<char> cards;
+    // chain_list<char> cards;
+    string cards;
 } pig[N >> 2];
 string s;
 char ch;
+int check(){
+    int f=1;
+    for(int i=1;i<=n;++i){
+        if(pig[i].identity=='m'&&pig[i].hp<=0) return -1;
+        if(pig[i].identity=='f'&&pig[i].hp>0){
+            // return 1;
+            f=0;
+        }
+    }
+    return f;
+}
+bool alive(int id){
+    return (pig[id].hp>0)?1:0;
+}
 int main()
 {
     //	ios::sync_with_stdio(0);
@@ -337,22 +272,41 @@ int main()
     for (int i = 1; i <= n; ++i)
     {
         cin >> s;
-        if (s.data() == "FP")
+        
+        if (s[0] == 'F')
             pig[i].identity = 'f';
-        else if (s.data() == "MP")
+        else if (s[0] == 'M')
             pig[i].identity = 'm';
         else
             pig[i].identity = 'z';
+        // dbg(pig[i].identity);
         for (int j = 1; j <= 4; ++j)
         {
             cin >> ch;
-            pig[i].cards.push_back(ch);
+            ch=ch-'A'+'a';
+            pig[i].cards+=ch;
+            // pig[i].cards.push_back(ch);
         }
     }
-    for(int i=1;i<=m;++i){
-        cin>>ch;
+    for (int i = 1; i <= m; ++i)
+    {
+        cin >> ch;
         pool.insert(ch);
     }
-    
-        
+    // for(int i=1;i<=100;++i)
+    //     cout<<pool.get();
+    int cur;
+    do{
+        ++cur;
+        cur=(cur-1)%n+1;
+        if(!alive(cur)) continue;
+        for(int i=1;i<=2;++i)
+            pig[cur].cards+=pool.get();
+        while(alive(cur)){
+            if(pig[cur].cards.length()==0) break;
+			for(int i=0;i<pig[cur].cards.length();++i){
+
+			}
+        }
+    }while(check()==0);
 }
