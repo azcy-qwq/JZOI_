@@ -1,37 +1,29 @@
-#include<iostream>
-#include<cstdio>
-#include<cstring>
-#include<cmath>
-#include<algorithm>
-#include<queue>
-#include<vector>
+#include<bits/stdc++.h>
 using namespace std;
+
 namespace IN {
-    #define MAX_INPUT 120000003
+    #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
     char buf[MAX_INPUT], * p1, * p2;
-    int f;
-    char ch;
-    template < typename T > inline void redi(T & x) {
+    template < typename T > inline bool redi(T & x) {
         static std::streambuf * inbuf = cin.rdbuf();
         x = 0;
-        f = 0;
-        ch = getc();
+        register int f = 0, flag = false;
+        register char ch = getc();
         while (!std::isdigit(ch)) {
             if (ch == '-') f = 1;
             ch = getc();
         }
-        if (std::isdigit(ch)) x = x * 10 + ch - '0', ch = getc();
+        if (std::isdigit(ch)) x = x * 10 + ch - '0', ch = getc(), flag = true;
         while (std::isdigit(ch)) {
             x = x * 10 + ch - 48;
             ch = getc();
         }
         x = f ? -x : x;
-        // return flag;
+        return flag;
     }
-    template < typename T, typename...Args > inline void redi(T & a, Args & ...args) {
-        redi(a);
-        redi(args...);
+    template < typename T, typename...Args > inline bool redi(T & a, Args & ...args) {
+        return redi(a) && redi(args...);
     }
     #undef getc
 }
@@ -99,80 +91,67 @@ namespace OUT {
 using IN::redi;
 using OUT::put;
 using OUT::putc;
-const int N=4e5+10;
-using namespace std;
-long long tree[N],lazy[N],a[N];
-void build_tree(int id,int l,int r){
-	if(l==r)
-	{
-		tree[id]=a[l];
-		return ;
-	}
-	int mid=(l+r)>>1;
-	build_tree(id<<1,l,mid);
-	build_tree(id<<1|1,mid+1,r);
-	tree[id]=tree[id<<1]+tree[id<<1|1]; 
-} 
-inline void push_down(int id,int l,int r){
-	if(lazy[id])
-	{
-		int mid=(l+r)>>1;
-		lazy[id<<1]+=lazy[id];
-		lazy[id<<1|1]+=lazy[id];
-		tree[id<<1]+=lazy[id]*(mid-l+1);
-		tree[id<<1|1]+=lazy[id]*(r-mid);
-		lazy[id]=0;
-	}
-}
-inline void push_up(int id)
-{
-	tree[id]=tree[id<<1]+tree[id<<1|1];
-}
-void update(int id,int l,int r,int x,int y,int v){
-	if(l>=x&&r<=y)
-	{
-		lazy[id]+=v;
-		tree[id]+=v*(r-l+1);
-		return;
-	}
-	push_down(id,l,r);
-	int mid=(l+r)>>1;
-	if(x<=mid) update(id<<1,l,mid,x,y,v);
-	if(y>mid) update(id<<1|1,mid+1,r,x,y,v);
-	push_up(id);
-}
-long long find(int id,int l,int r,int x,int y)
-{
-	if(x<=l&&r<=y)return tree[id];
-	push_down(id,l,r);
-	int mid=(l+r)>>1;
-	long long ans=0;
-	if(x<=mid) ans=ans+find(id<<1,l,mid,x,y);
-	if(y>mid) ans=ans+find(id<<1|1,mid+1,r,x,y);
-	return ans; 
-}
-main()
-{
-	int n,m;
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-    redi(n,m);
-	for(int i=1;i<=n;i++)
-        redi(a[i]);
-	build_tree(1,1,n);
-	int op,a,b,c;
-	for(int i=1;i<=m;i++)
-	{
-        redi(op,a,b);
-		if(op==1)
-		{
-            redi(c);
-			update(1,1,n,a,b,c);
-		}
-		else
-		{
-            put(find(1,1,n,a,b));
-		}
-	}
-	return 0;
+namespace azcy{
+    using namespace std;
+    bool debug_switch=1;
+    void auto_init(){
+        ios::sync_with_stdio(0);
+        cin.tie(0);cout.tie(0);
+    }
+    void qfopen(string INPUT_FILE_NAME,string OUTPUT_FILE_NAME){
+        freopen(INPUT_FILE_NAME.data(),"r",stdin);
+        freopen(OUTPUT_FILE_NAME.data(),"w",stdout);
+    }
+    template<typename T>
+    void dbgo(T x){
+        cout<<x<<" ";
+    }
+    template<typename First,typename... Rest>
+    void dbgo(First first,Rest... rest){
+        cout<<first<<" ";
+        dbgo(rest...);
+    }  
+    template<typename First,typename... Rest>
+    void dbg(First first,Rest... rest){
+        if(!debug_switch)return ;
+        cout<<first<<" ";
+        dbgo(rest...);
+        cout<<"\n";
+    }//made by _azcy
+	template<typename T>
+    void dbg(T x)
+    {
+        if (!debug_switch)
+            return;
+        cout << x << "\n";
+    }
+}using namespace azcy;
+const int N=1e4+10;
+
+long long ans,a,b,n,seed,inp,score;
+int main(){
+//	ios::sync_with_stdio(0);
+    dbg("Input Count of Problems and Random-Seed.");
+    cin>>n>>seed;
+    mt19937 rnd(seed);
+    system("pause");
+    for(int i=1;i<=n;++i){
+        system("cls");
+        dbg(i,"/",n);
+        a=rnd()%2000;
+        b=rnd()%2200;
+        dbg("Score:",score);
+        dbg(a,"x",b,"=");
+        ans=a*b;
+        cin>>inp;
+        if(inp==ans) ++score;
+    }
+    system("cls");
+    _sleep(200);
+    cout<<"\nFinal Score:"<<score<<endl;
+    cout<<"Time:"<<(double)clock()/CLOCKS_PER_SEC<<endl;
+    cout<<"MUltiScore:"<<(double)pow(0.98,(double)clock()/CLOCKS_PER_SEC/(double)n)*(double)score/n*100;
+    system("pause");
+    system("pause");
+    system("pause");
 }
