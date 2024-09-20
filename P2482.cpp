@@ -302,10 +302,11 @@ int main()
         if(!alive(cur)) continue;
         for(int i=1;i<=2;++i)
             pig[cur].cards+=pool.get();
-        while(alive(cur)){
+        while(alive(cur)&&check()==0){
             if(pig[cur].cards.length()==0) break;
 			for(int i=0;i<pig[cur].cards.length();++i){
-
+				if(check()==0&&alive(cur)) break;
+				
 			}
         }
     }while(check()==0);
