@@ -25,6 +25,8 @@ sock_Client = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP); // 创建客户端用于
     SOCKADDR_IN addr_server;                             // 服务器的地址数据结构
     addr_server.sin_family = AF_INET;
     addr_server.sin_port = htons(4567);                        // 端口号为4567
+    string addr_S;
+//    cin>>addr_S;
     addr_server.sin_addr.S_un.S_addr = inet_addr("127.0.0.1"); // 127.0.0.1为本电脑IP地址
     SOCKADDR_IN sock;
     int len = sizeof(sock);

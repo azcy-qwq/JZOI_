@@ -55,8 +55,16 @@ int main()
         }
         cout << "Reply Message:";
         // <br> 
-        // Response =" "; 
-        cin >> Response; // 给客户端回复消息
+        // Response =" ";
+		string ss; 
+        cin >>ss;
+        int t=ss.size();
+        for(int i=0;i<t;++i)
+        	Response[i]=ss[i];
+        for(int i=0;i<t;++i)
+        	cout<<Response[i]<<"-";
+        cout<<endl;
+//		Response=ss.data(); // 给客户端回复消息
         sendto(sockServer, Response, strlen(Response), 0, (SOCKADDR *)&addr_Clt, sizeof(SOCKADDR));
     }
 

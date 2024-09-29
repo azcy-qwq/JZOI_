@@ -2,14 +2,12 @@
 #include<cstdio>
 #include<cstring>
 #include<cmath>
-#include<algorithm>
-#include<queue>
 #include<vector>
-#include<bits/stdc++.h>
+#include<bitset>
 const int N=1e8+28;
 using namespace std;
 namespace IN {
-    #define MAX_INPUT 25000003
+    #define MAX_INPUT N<<1
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
     char buf[MAX_INPUT], * p1, * p2;
     template < typename T > inline bool redi(T & x) {
@@ -67,7 +65,7 @@ namespace OUT {
 using IN::redi;
 using OUT::put;
 using OUT::putc;
-int n,q,k,a[N],atop;
+int n,q,k,a[N/10],atop;
 bitset<N> bs;
 void init(){
 	int temp=ceil(sqrt(n))+1;
@@ -78,6 +76,7 @@ void init(){
 	for(int i=3;i<=n;i+=2){
 		if(bs[i])continue;
 		a[++atop]=i;
+        if(i<=sqrt(n)+1)
 		for(int j=i+i;j<=n;j+=i){
 			bs[j]=1;
 		}
@@ -87,14 +86,22 @@ int main()
 {
 	ios::sync_with_stdio(0);
 	redi(n);
-	// redi(q);
+	redi(q);
 	// ++q;
 	init();
-	// while(--q){
-	// 	redi(k);
-	// 	put(a[k]);
-	// }
-    put(a[atop]);
-    put(a[atop-10]);
+	while(q--){
+		redi(k);
+		put(a[k]);
+	}
+    put(atop);
+    // put(a[atop-10]);
 	return 0;
 }
+/*
+100000000 5
+1
+2
+3
+4
+5
+*/

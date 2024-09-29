@@ -22,7 +22,9 @@ int main()
     	SOCKADDR_IN addrSrv;
 	   	addrSrv.sin_family = AF_INET;
 	    addrSrv.sin_port = htons(5099);
-    	addrSrv.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
+	    string addrs;
+	    cin>>addrs;
+    	addrSrv.sin_addr.S_un.S_addr = inet_addr(addrs.data());
 
     //创建套接字
     	SOCKET sockClient = socket(AF_INET, SOCK_STREAM, 0);
