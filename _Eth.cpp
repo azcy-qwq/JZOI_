@@ -1,7 +1,7 @@
 #include<iostream>
-#include<cstdio>
+#include<cstdio> 
 #include<cstring>
-#include<cmath>
+#include<cmath> 
 #include<vector>
 #include<bitset>
 const int N=1e8+28;
@@ -93,7 +93,7 @@ int main()
 		redi(k);
 		put(a[k]);
 	}
-    put(atop);
+    // put(atop);
     // put(a[atop-10]);
 	return 0;
 }
