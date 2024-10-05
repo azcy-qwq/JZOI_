@@ -1402,10 +1402,16 @@ private:
     }
 };
 using namespace std;
-RBTreeMap<int, int> rmp;
+// unordered_map<int,int> rmp;
+// RBTreeMap<int, int> rmp;
+map<int,int> rmp;
+mt19937 rnd(time(0));
 #endif // RBTREE_MAP_HPP
 main()
 {
-    rmp[1] = 1;
-    cout << rmp[2] << " " << rmp[1];
+    for(int i=1;i<=(int)2e5;++i)
+        rmp[rnd()]=rnd();
+    // rmp[1] = 1;
+    cout << rmp[2] << " " << rmp[1]<<"\n"<<(double)clock()/CLOCKS_PER_SEC;
+    return 0;
 }
