@@ -1,87 +1,5 @@
-#ifndef _GLIBCXX_NO_ASSERT
-#include <cassert>
-#endif
-#include <cctype>
-#include <cerrno>
-#include <cfloat>
-#include <ciso646>
-#include <climits>
-#include <clocale>
-#include <cmath>
-#include <csetjmp>
-#include <csignal>
-#include <cstdarg>
-#include <cstddef>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <ctime>
-#if __cplusplus >= 201103L
-#include <ccomplex>
-#include <cfenv>
-#include <cinttypes>
-#include <cstdalign>
-#include <cstdbool>
-#include <cstdint>
-#include <ctgmath>
-#include <cwchar>
-#include <cwctype>
-#endif
-#include <algorithm>
-#include <bitset>
-#include <complex>
-#include <deque>
-#include <exception>
-#include <fstream>
-#include <functional>
-#include <iomanip>
-#include <ios>
-#include <iosfwd>
-#include <iostream>
-#include <istream>
-#include <iterator>
-#include <limits>
-#include <list>
-#include <locale>
-#include <map>
-#include <memory>
-#include <new>
-#include <numeric>
-#include <ostream>
-#include <queue>
-#include <set>
-#include <sstream>
-#include <stack>
-#include <stdexcept>
-#include <streambuf>
-#include <string>
-#include <typeinfo>
-#include <utility>
-#include <valarray>
-#include <vector>
-#if __cplusplus >= 201103L
-#include <array>
-#include <atomic>
-#include <chrono>
-#include <condition_variable>
-#include <forward_list>
-#include <future>
-#include <initializer_list>
-#include <mutex>
-#include <random>
-#include <ratio>
-#include <regex>
-#include <scoped_allocator>
-#include <system_error>
-#include <thread>
-#include <tuple>
-#include <typeindex>
-#include <type_traits>
-#include <unordered_map>
-#include <unordered_set>
-#endif
+#include<bits/stdc++.h>
 using namespace std;
-
 namespace IN {
     #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
@@ -108,10 +26,9 @@ namespace IN {
     }
     #undef getc
 }
-
 namespace OUT {
     template < typename T > inline void put(T x) {
-        static std::streambuf * outbuf = cout.rdbuf();
+        static std::streambuf * outbuf = cerr.rdbuf();
         static char stack[21];
         static int top = 0;
         if (x < 0) {
@@ -134,11 +51,11 @@ namespace OUT {
         outbuf -> sputc('\n');
     }
     inline void putc(const char ch) {
-        static std::streambuf * outbuf = cout.rdbuf();
+        static std::streambuf * outbuf = cerr.rdbuf();
         outbuf -> sputc(ch);
     }
     template < typename T > inline void put(const char ch, T x) {
-        static std::streambuf * outbuf = cout.rdbuf();
+        static std::streambuf * outbuf = cerr.rdbuf();
         static char stack[21];
         static int top = 0;
         if (x < 0) {
@@ -185,49 +102,105 @@ namespace azcy{
     }
     template<typename T>
     void dbgo(T x){
-        cout<<x<<" ";
+        cerr<<x<<" ";
     }
     template<typename First,typename... Rest>
     void dbgo(First first,Rest... rest){
-        cout<<first<<" ";
+        cerr<<first<<" ";
         dbgo(rest...);
     }  
     template<typename First,typename... Rest>
     void dbg(First first,Rest... rest){
         if(!debug_switch)return ;
-        cout<<first<<" ";
+        cerr<<first<<" ";
         dbgo(rest...);
-        cout<<"\n";
+        cerr<<"\n";
     }//made by _azcy
-	template<typename T>
+template<typename T>
     void dbg(T x)
     {
         if (!debug_switch)
             return;
-        cout << x << "\n";
+        cerr << x << "\n";
     }
 }using namespace azcy;
 const int N=1e4+10;
+int t,k,r;
+typedef unsigned int ui;
+unsigned int kth[N],h1,kk[N],hh;
 string s;
-char ch,ch2;
-int main(){
-	ios::sync_with_stdio(0);
-    cin.tie(0);
-    freopen("aaa.out","w",stdout);
-    while(1){
-        s.clear();
-        ch=0;
-        while(ch!=10){
-            if(ch=='\"'||ch=='\\')
-                s+='\\';
-            s+=ch,ch2=ch,ch=getchar();
-            // cout<<(int)ch<<endl;
-            // system("pause");
+vector<char> v;
+inline ui calc(char a,int b,int c){
+    return (ui)a*(kth[c-b-1]);
+}
+inline ui calc2(char a,int b,int c){
+    return (ui)a*(kk[c-b-1]);
+}
+bool dfs(int cur,ui h,int l,ui h2){
+    if(cur==l){
+        if(h==h1&&hh!=h2){
+            // dbg(hh,h2);
+            return true;
         }
-        if(ch2=='?') break;
-        // dbg('"',s,"\",");
-        cout<<"\""<<s<<"\","<<"\n";
-        // cout<<ch2<<endl;
-        // _sleep(100);
+            
+        else
+            return false; 
+    }
+        
+    if(kth[l-cur-1]==0){
+        if(dfs(cur+1,h,l,h2+calc2('A',cur,l))){
+            v.push_back('A');
+            return 1;
+        }
+        if(dfs(cur+1,h,l,h2+calc2('B',cur,l))){
+            v.push_back('B');
+            return 1;
+        }
+    }else
+        for(char ch='A';ch<='Z';++ch)
+            if(dfs(cur+1,h+calc(ch,cur,l),l,h2+calc2(ch,cur,l))){
+                v.push_back(ch);
+                return true;
+            }
+        
+        
+    return false;
+}
+void solve(){
+    string s2;
+    v.clear();
+    h1=0,hh=0;
+    cin>>s;
+    for(int i=0;i<s.length();++i){
+        h1+=(ui)s[i]*kth[s.length()-i-1];
+        hh+=calc2(s[i],i,s.length());
+    }
+    for(int i=r;i>=1;--i){
+        if(dfs(0,0,i,0)){
+            for(int i=v.size()-1;i>=0;--i)
+                cout<<v[i];
+            cout<<"\n";
+            return;
+        }
+            
+    }
+    cout<<"-1\n";
+}
+mt19937 rnd(time(0));
+void init(){
+    kth[0]=1;
+    kth[1]=k;
+    for(int i=2;i<=10;++i)
+        kth[i]=kth[i-1]*k,kk[i]=rnd();
+}
+int main(){
+    freopen("hash.in","r",stdin);
+    freopen("hash.out","w",stdout);
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cin>>t>>k>>r;
+    init();
+    while(t--){
+        solve();
     }
 }
