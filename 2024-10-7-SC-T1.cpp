@@ -1,6 +1,41 @@
 #include<bits/stdc++.h>
 using namespace std;
 const int N=1e5+10;
+namespace azcy{
+    using namespace std;
+    bool debug_switch=1;
+    void auto_init(){
+        ios::sync_with_stdio(0);
+        cin.tie(0);cout.tie(0);
+    }
+    void qfopen(string INPUT_FILE_NAME,string OUTPUT_FILE_NAME){
+        freopen(INPUT_FILE_NAME.data(),"r",stdin);
+        freopen(OUTPUT_FILE_NAME.data(),"w",stdout);
+    }
+    template<typename T>
+    void dbgo(T x){
+        cerr<<x<<" ";
+    }
+    template<typename First,typename... Rest>
+    void dbgo(First first,Rest... rest){
+        cerr<<first<<" ";
+        dbgo(rest...);
+    }  
+    template<typename First,typename... Rest>
+    void dbg(First first,Rest... rest){
+        if(!debug_switch)return ;
+        cerr<<first<<" ";
+        dbgo(rest...);
+        cerr<<"\n";
+    }//made by _azcy
+template<typename T>
+    void dbg(T x)
+    {
+        if (!debug_switch)
+            return;
+        cerr << x << "\n";
+    }
+}using namespace azcy;
 inline int w2(int x1,int x2){return (x1<<3)+x2;}
 inline int w3(int x1,int x2,int x3){return (x1<<6)+(x2<<3)+x3;}
 inline int w4(int x1,int x2,int x3,int x4){return (x1<<9)+(x2<<6)+(x3<<3)+x4;}
@@ -133,12 +168,14 @@ void solve5(){
                 for(int i4=0;i4<n[4];++i4)
                     for(int i5=0;i5<n[5];++i5){
                         bool flag=1;
-                        for(int j1=i1;j1<=i1+m[1]-1;++j1){if(j1>=n[1]||j1-i1>=m[1]){flag=0;break;}
-                            for(int j2=i2;j2<=i2+m[2]-1;++j2){if(j2>=n[2]||j2-i2>=m[2]){flag=0;break;}
-                                for(int j3=i3;j3<=i3+m[3]-1;++j3){if(j3>=n[3]||j3-i3>=m[3]){flag=0;break;}
-                                    for(int j4=i4;j4<=i4+m[4]-1;++j4){if(j4>=n[4]||j4-i4>=m[4]){flag=0;break;}
-                                        for(int j5=i5;j5<=i5+m[5];++j5){if(j5>=n[5]||j5-i5>=m[5]){flag=0;break;}
+                        for(int j1=i1;j1<=i1+m[1]-1;++j1){if(j1>=n[1]){flag=0;break;}
+                            for(int j2=i2;j2<=i2+m[2]-1;++j2){if(j2>=n[2]){flag=0;break;}
+                                for(int j3=i3;j3<=i3+m[3]-1;++j3){if(j3>=n[3]){flag=0;break;}
+                                    for(int j4=i4;j4<=i4+m[4]-1;++j4){if(j4>=n[4]){flag=0;break;}
+                                        for(int j5=i5;j5<=i5+m[5]-1;++j5){if(j5>=n[5]){flag=0;break;}
+                                            
                                             if(s1[w5(j1,j2,j3,j4,j5)]!=s2[w5(j1-i1,j2-i2,j3-i3,j4-i4,j5-i5)]){
+//                                                dbg(s1[w5(j1,j2,j3,j4,j5)],s2[w5(j1-i1,j2-i2,j3-i3,j4-i4,j5-i5)]);
                                                 flag=0;
                                                 break;
                                             }
@@ -147,14 +184,19 @@ void solve5(){
                                 }
                             }
                         }
-                        if(flag)
+                        if(flag){
+//                            dbg(i1,i2,i3,i4,i5);
                             ++ans;
+                        }
+                            
                     }
 }
 int main(){
+//     freopen("1.in","r",stdin);
     ios::sync_with_stdio(0);
     cin.tie(0);
     cin>>k;
+//    cout<<k<<endl;
     switch(k){
         case 1:
             solve1();
@@ -177,3 +219,10 @@ int main(){
     cout<<ans;
     return 0;
 }
+/*
+5
+2 2 2 2 2
+abababababababababababababababab
+1 2 1 1 1 
+aa
+*/

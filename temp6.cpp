@@ -1,6 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
-#define int long long
+ 
 namespace IN {
     #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
@@ -126,87 +126,19 @@ template<typename T>
         cerr << x << "\n";
     }
 }using namespace azcy;
-const int N=1e4+10;
-priority_queue<int,vector<int>,greater<int> > ans;
-int n,m,k,S,T,u,v,w,dp[N];
-vector<int> nei[N];
-vector<int> val[N];
+const int N=1e7+10;
 bitset<N> vis;
-bitset<N> ava;
-bool dfs(int id,int fa){
-    vis[id]=1;
-    if(id==T) {
-        ava[id]=1;
-        return 1;
+int n,a[N];
+int main(){
+//ios::sync_with_stdio(0);
+    for(int i=1;i<=4;++i)
+        cin>>a[i];
+    for(int i=0;i<=100;++i)
+        for(int j=0;j<=100;++j)
+            for(int k=0;k<=100;++k)
+                for(int l=0;l<=100;++l)
+                    vis[i*a[1]+j*a[2]+k*a[3]+l*a[4]]=1;
+    for(int i=1;i<=1000;++i){
+        dbg(i,vis[i]);
     }
-    bool flag=0;
-    for(int u:nei[id]){
-        if(u==fa||vis[u]) continue;
-        flag|=dfs(u,id);
-    }
-    ava[id]=flag;
-    return flag;
-}
-vector<int> circ;
-void df5(int id,int fa,int v){
-    if(id==T){
-        ans.push(v);
-        // if(ans.size()>=k) return ;
-        // return ;
-    } 
-    if(vis[id]==1){
-        circ.push_back(v-dp[id]);
-        return ;
-    }
-    vis[id]=1;
-    int temp=0;
-    for(int u:nei[id]){
-        if(ava[id]==0) continue;
-        df5(u,id,v+val[id][temp]);
-        ++temp;
-    }
-    dp[id]=v;
-}
-const int N2=2e6+10;
-int ev[N2];
-void eth(){
-    int cnt=0;
-    sort(circ.begin(),circ.end());
-    while(ans.size())
-        ev[ans.top()]=1,ans.pop();
-    for(int i=1;i<=100000;++i){
-        if(ev[i]==0) continue;
-        cnt+=ev[i];
-        if(k<=cnt){
-            cout<<i;
-            exit(0);
-        }
-        for(int k=0;k<circ.size();++k){
-            for(int j=i+circ[k];j<=100000;j+=circ[k])
-                ev[j]+=ev[i];
-        }
-    }
-    if(circ.size()==0){
-        cout<<"-1\n";
-        exit(0);
-    }
-    cout<<k-cnt+100000;
-    exit(0);
-}
-signed main(){
-ios::sync_with_stdio(0);
-    cin>>n>>m>>k>>S>>T;
-    for(int i=1;i<=m;++i){
-        cin>>u>>v>>w;
-        nei[u].push_back(v);
-        val[u].push_back(w);
-    }
-    dfs(S,S);
-    vis.reset();
-    df5(S,S,0);
-    if(ans.size()==0){
-        cout<<"-1";
-        return 0;
-    }
-    eth();
 }
