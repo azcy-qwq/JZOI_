@@ -1,0 +1,177 @@
+#include<bits/stdc++.h>
+using namespace std;
+ 
+namespace IN {
+    #define MAX_INPUT 25000003
+    #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
+    char buf[MAX_INPUT], * p1, * p2;
+    template < typename T > inline bool redi(T & x) {
+        static std::streambuf * inbuf = cin.rdbuf();
+        x = 0;
+        register int f = 0, flag = false;
+        register char ch = getc();
+        while (!std::isdigit(ch)) {
+            if (ch == '-') f = 1;
+            ch = getc();
+        }
+        if (std::isdigit(ch)) x = x * 10 + ch - '0', ch = getc(), flag = true;
+        while (std::isdigit(ch)) {
+            x = x * 10 + ch - 48;
+            ch = getc();
+        }
+        x = f ? -x : x;
+        return flag;
+    }
+    template < typename T, typename...Args > inline bool redi(T & a, Args & ...args) {
+        return redi(a) && redi(args...);
+    }
+    #undef getc
+}
+ 
+namespace OUT {
+    template < typename T > inline void put(T x) {
+        static std::streambuf * outbuf = cerr.rdbuf();
+        static char stack[21];
+        static int top = 0;
+        if (x < 0) {
+            outbuf -> sputc('-');
+            x = -x;
+        }
+        if (!x) {
+            outbuf -> sputc('0');
+            outbuf -> sputc('\n');
+            return;
+        }
+        while (x) {
+            stack[++top] = x % 10 + '0';
+            x /= 10;
+        }
+        while (top) {
+            outbuf -> sputc(stack[top]);
+            --top;
+        }
+        outbuf -> sputc('\n');
+    }
+    inline void putc(const char ch) {
+        static std::streambuf * outbuf = cerr.rdbuf();
+        outbuf -> sputc(ch);
+    }
+    template < typename T > inline void put(const char ch, T x) {
+        static std::streambuf * outbuf = cerr.rdbuf();
+        static char stack[21];
+        static int top = 0;
+        if (x < 0) {
+            outbuf -> sputc('-');
+            x = -x;
+        }
+        if (!x) {
+            outbuf -> sputc('0');
+            outbuf -> sputc(ch);
+            return;
+        }
+        while (x) {
+            stack[++top] = x % 10 + '0';
+            x /= 10;
+        }
+        while (top) {
+            outbuf -> sputc(stack[top]);
+            --top;
+        }
+        outbuf -> sputc(ch);
+    }
+    template < typename T, typename...Args > inline void put(T a, Args...args) {
+        put(a);
+        put(args...);
+    }
+    template < typename T, typename...Args > inline void put(const char ch, T a, Args...args) {
+        put(ch, a);
+        put(ch, args...);
+    }
+}
+using IN::redi;
+using OUT::put;
+using OUT::putc;
+namespace azcy{
+    using namespace std;
+    bool debug_switch=1;
+    void auto_init(){
+        ios::sync_with_stdio(0);
+        cin.tie(0);cout.tie(0);
+    }
+    void qfopen(string INPUT_FILE_NAME,string OUTPUT_FILE_NAME){
+        freopen(INPUT_FILE_NAME.data(),"r",stdin);
+        freopen(OUTPUT_FILE_NAME.data(),"w",stdout);
+    }
+    template<typename T>
+    void dbgo(T x){
+        cerr<<x<<" ";
+    }
+    template<typename First,typename... Rest>
+    void dbgo(First first,Rest... rest){
+        cerr<<first<<" ";
+        dbgo(rest...);
+    }  
+    template<typename First,typename... Rest>
+    void dbg(First first,Rest... rest){
+        if(!debug_switch)return ;
+        cerr<<first<<" ";
+        dbgo(rest...);
+        cerr<<"\n";
+    }//made by _azcy
+template<typename T>
+    void dbg(T x)
+    {
+        if (!debug_switch)
+            return;
+        cerr << x << "\n";
+    }
+}using namespace azcy;
+#define int long long
+const int N=4e5+10;
+int n,m1,m2,cnta,cntb,ansa[N],ansb[N],ans=INT_MIN,arga[N],argb[N];
+pair<int,int> p,a[N],b[N];
+priority_queue<int,vector<int>,greater<int> > pq1,pq2;
+signed main(){
+ios::sync_with_stdio(0);
+    cin>>n>>m1>>m2;
+    for(int i=1;i<=m1;++i){
+        pq1.push(i);
+        cin>>p.first>>p.second;
+        a[++cnta]={p.first,i};
+        a[++cnta]={p.second,i};
+    }sort(a+1,a+cnta+1);
+    for(int i=1;i<=m2;++i){
+        pq2.push(i);
+        cin>>p.first>>p.second;
+        b[++cntb]={p.first,i};
+        b[++cntb]={p.second,i};
+    }sort(b+1,b+cntb+1);
+    for(int i=1,cur=0;i<=cnta;++i){
+        cur=a[i].second;
+        if(arga[cur]) pq1.push(arga[cur]);
+        else{
+            arga[cur]=pq1.top();
+            ansa[arga[cur]]++;
+            pq1.pop();
+        }
+    }for(int i=1,cur=0;i<=cntb;++i){
+        cur=b[i].second;
+        if(argb[cur]) pq2.push(argb[cur]);
+        else{
+            argb[cur]=pq2.top();
+            ansb[argb[cur]]++;
+            pq2.pop();
+        }
+    }
+    for(int i=1;i<=n;++i){
+        ansa[i]+=ansa[i-1],ansb[i]+=ansb[i-1];
+    }
+    for(int i=0,j;i<=n;++i){
+        j=n-i;
+        dbg(i,ansa[i],j,ansb[j]);
+        ans=max(ans,ansa[i]+ansb[j]);
+    }
+    cout<<ans;
+        
+    
+}
