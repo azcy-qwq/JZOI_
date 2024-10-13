@@ -3,17 +3,15 @@
 #include <WinSock2.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 #pragma comment(lib, "ws2_32.lib")
 using namespace std;
 main()
 {
-    
-        //发送数据
-	while(1){WSADATA wsaData;
+    WSADATA wsaData;
     int port = 5099;
 
-//    char buf[] = "Server: hello, I am a server.....";
+    //    char buf[] = "Server: hello, I am a server.....";
 
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
     {
@@ -21,21 +19,23 @@ main()
         return 0;
     }
 
-    //创建用于监听的套接字
+    // 创建用于监听的套接字
     SOCKET sockSrv = socket(AF_INET, SOCK_STREAM, 0);
 
     SOCKADDR_IN addrSrv;
     addrSrv.sin_family = AF_INET;
-    addrSrv.sin_port = htons(port); //1024以上的端口号
+    addrSrv.sin_port = htons(port); // 1024以上的端口号
     addrSrv.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
 
     int retVal = bind(sockSrv, (LPSOCKADDR)&addrSrv, sizeof(SOCKADDR_IN));
-    if (retVal == SOCKET_ERROR){
+    if (retVal == SOCKET_ERROR)
+    {
         printf("Failed bind:%d\n", WSAGetLastError());
         return 0;
     }
 
-    if (listen(sockSrv, 10) == SOCKET_ERROR){
+    if (listen(sockSrv, 10) == SOCKET_ERROR)
+    {
         printf("Listen failed:%d", WSAGetLastError());
         return 0;
     }
@@ -43,22 +43,27 @@ main()
     SOCKADDR_IN addrClient;
     int len = sizeof(SOCKADDR);
 
-//等待客户请求到来    
-        SOCKET sockConn = accept(sockSrv, (SOCKADDR *)&addrClient, &len);
-        if (sockConn == SOCKET_ERROR){
-            printf("Accept failed:%d", WSAGetLastError());
-            //break;
-        }
+    // 等待客户请求到来
+    SOCKET sockConn = accept(sockSrv, (SOCKADDR *)&addrClient, &len);
+    if (sockConn == SOCKET_ERROR)
+    {
+        printf("Accept failed:%d", WSAGetLastError());
+        // break;
+    }
 
-        printf("Accept client IP:[%s]\n", inet_ntoa(addrClient.sin_addr));
+    printf("Accept client IP:[%s]\n", inet_ntoa(addrClient.sin_addr));
 
-		string s;
-		cin>>s;
-		char *buf=s.data();
-		int iSend = send(sockConn, buf, sizeof(buf), 0);
-        if (iSend == SOCKET_ERROR){
+    // 发送数据
+    while (1)
+    {
+        string s;
+        cin >> s;
+        char *buf = s.data();
+        int iSend = send(sockConn, buf, sizeof(buf), 0);
+        if (iSend == SOCKET_ERROR)
+        {
             printf("send failed");
-           // break;
+            // break;
         }
 
         char recvBuf[100];
@@ -66,13 +71,11 @@ main()
         //         //接收数据
         recv(sockConn, recvBuf, sizeof(recvBuf), 0);
         printf("Received:%s\n", recvBuf);
-		
-		closesocket(sockConn);
-    	closesocket(sockSrv);
-    	WSACleanup();
-	}
-        
 
-        
+        // closesocket(sockConn);
+        // closesocket(sockSrv);
+        WSACleanup();
+    }
+
     system("pause");
 }

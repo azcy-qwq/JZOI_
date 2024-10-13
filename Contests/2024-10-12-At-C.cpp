@@ -127,7 +127,92 @@ template<typename T>
     }
 }using namespace azcy;
 const int N=1e4+10;
-int main(){
-//ios::sync_with_stdio(0);
-    
+int n;
+char a[N][N],g[N][N];
+void display(){
+    cout<<"\n";
+    for(int i=1;i<=n;++i){
+        for(int j=1;j<=n;++j){
+            cout<<a[i][j];
+        }
+        cout<<"\n";
+    }
 }
+void solve(int x){
+    char y;
+	if(x%4==1){
+		for(int i=x+1;i<n-x+1;i++){
+			y=a[x][i];
+			a[x][i]=a[n-i+1][x];
+			a[n-i+1][x]=a[n-x+1][n-i+1];
+			a[n-x+1][n-i+1]=a[i][n-x+1];
+			a[i][n-x+1]=y;
+		}
+		y=a[x][x];
+		a[x][x]=a[n-x+1][x];
+		a[n-x+1][x]=a[n-x+1][n-x+1];
+		a[n-x+1][n-x+1]=a[x][n-x+1];
+		a[x][n-x+1]=y;
+	}
+	if(x%4==2){
+		for(int i=x;i<=n-x+1;i++){
+			swap(a[x][i],a[n-x+1][n-i+1]);
+			swap(a[i][x],a[n-i+1][n-x+1]);
+		}
+		swap(a[x][x],a[n-x+1][n-x+1]);
+		swap(a[n-x+1][x],a[x][n-x+1]);
+	}
+	if(x%4==3){
+		for(int i=x+1;i<n-x+1;i++){
+			y=a[x][i];
+			a[x][i]=a[i][n-x+1];
+			a[i][n-x+1]=a[n-x+1][n-i+1];
+			a[n-x+1][n-i+1]=a[n-i+1][x];
+			a[n-i+1][x]=y;
+		}
+		y=a[x][x];
+		a[x][x]=a[x][n-x+1];
+		a[x][n-x+1]=a[n-x+1][n-x+1];
+		a[n-x+1][n-x+1]=a[n-x+1][x];
+		a[n-x+1][x]=y;
+	}
+}
+int main(){
+ios::sync_with_stdio(0);
+    cin>>n;
+    // for(int i=1;i<=n;++i)
+    //     for(int j=1;j<=n;++j){
+    //         cin>>a[i][j];
+    //         g[i][j]=a[i][j];
+    //     }
+    // for(int i=1;i<=n;++i){
+    //     for(int j=1;j<=n;++j){
+    //         int temp=min(min(i,j),min(n-i+1,n-j+1)),x,y,x1=i,y1=j;
+    //         dbg(i,j,temp%4);
+    //         for(int i=1;i<=temp%4;++i){
+    //             x=y1;
+    //             y=n-x1+1;
+    //             y1=y;
+    //             x1=x;
+    //         }
+    //         g[i][j]=a[x1][y1];
+    //     }
+    // }
+    for(int i=1;i<=n;i++)
+		for(int j=1;j<=n;j++)
+			cin>>a[i][j];
+	for(int i=1;i<=n/2;i++)
+		solve(i);
+	for(int i=1;i<=n;i++){
+		for(int j=1;j<=n;j++)cout<<a[i][j];
+		cout<<"\n";
+	}
+		
+}
+/*
+4
+####
+#...
+#...
+....
+*/

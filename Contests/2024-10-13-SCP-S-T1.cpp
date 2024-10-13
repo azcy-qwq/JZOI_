@@ -1,6 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
-// #define int long long
+ 
 namespace IN {
     #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
@@ -126,32 +126,56 @@ template<typename T>
         cerr << x << "\n";
     }
 }using namespace azcy;
-// #define int long long
-const int N=1.2e7+10;
-int n,k,a[N],qzh1[N],cnt[N],dp1[N],dp2[N],ans=INT_MIN;
+const int N=1e6+10;
+#define int long long
+int a[N],n,cnt[N],c,T,v[12],ans,dp[7],dpa;
+char ch;
+string s;
 signed main(){
+    // freopen("bargain5.in","r",stdin);
+    // freopen("bargain.out","w",stdout);
 ios::sync_with_stdio(0);
-    cin>>n>>k;
-    for(int i=1;i<=n;++i){
-        cin>>a[i];
-        qzh1[i]=qzh1[i-1]+(a[i]==0)+a[i];
-        cnt[i]=cnt[i-1]+(a[i]==0);
-        // dbg(i,cnt[i],qzh1[i],qzh2[i]);
-    } 
-    for(int i=1;i<=n;++i){
-        dp1[i]=max(0,max(dp1[i-1],0)+a[i]-(a[i]==0));
-        // cout<<dp1[i]<<" ";
+    cin.tie(0);
+    cin>>c>>T;
+    while(T--){
+        cin>>s;
+        ans=0;
+        memset(cnt,0,sizeof(cnt));
+        for(int i=0;i<s.length();++i){
+            // cin>>ch;
+            a[i+1]=s[i]-'0';
+            cnt[s[i]-'0']++;
+        }
+        for(int i=1;i<=9;++i)
+            cin>>v[i];
+        for(int i=1;i<=9;++i){
+            ans+=cnt[i]*v[i];
+        }
+        s='#'+s;
+        dp[0]=0;
+        dpa=0;
+        for(int i=1;i<=5;++i)
+            dp[i]=INT_MAX;
+        for(int i=s.length()-1;i>=1;--i){
+            for(int j=min((int)5,(int)s.length()-i);j>=1;--j){
+                dp[j]=min(dp[j],dp[j-1]-v[a[i]]+(int)pow(10,j-1)*(a[i]));
+                // dbg(i,j,dp[j]);
+            }
+        }
+        for(int i=0;i<=5;++i)
+            dpa=min(dpa,dp[i]);
+        // dbg(ans,dpa,"_");
+        cout<<ans+dpa<<"\n";
     }
-    for(int i=n;i>=1;--i){
-        dp2[i]=max(0,max(dp2[i+1],0)+a[i]-(a[i]==0));
-    }
-    // for(int i=1;i<=n;++i)
-    // cout<<dp2[i]<<" ";
-    // cout<<"_\n";
-    // "#"
-    cout<<ans;
+    // system("pause");
 }
 /*
-28 5
--1  1 -1  1  0 -1  0  1  0  0 -1 -1  0 -1  0 -1  1 -1  0  1 -1  0 -1 -1  1 -1  1  1
+0
+3
+123
+10 10 10 10 10 10 10 10 10 
+1121
+2 1 2 2 2 2 2 2 2
+123
+15 50 50 8 0 0 0 0 0
 */

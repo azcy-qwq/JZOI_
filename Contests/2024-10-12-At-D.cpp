@@ -1,133 +1,81 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
- 
-namespace IN {
-    #define MAX_INPUT 25000003
-    #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
-    char buf[MAX_INPUT], * p1, * p2;
-    template < typename T > inline bool redi(T & x) {
-        static std::streambuf * inbuf = cin.rdbuf();
-        x = 0;
-        register int f = 0, flag = false;
-        register char ch = getc();
-        while (!std::isdigit(ch)) {
-            if (ch == '-') f = 1;
-            ch = getc();
-        }
-        if (std::isdigit(ch)) x = x * 10 + ch - '0', ch = getc(), flag = true;
-        while (std::isdigit(ch)) {
-            x = x * 10 + ch - 48;
-            ch = getc();
-        }
-        x = f ? -x : x;
-        return flag;
-    }
-    template < typename T, typename...Args > inline bool redi(T & a, Args & ...args) {
-        return redi(a) && redi(args...);
-    }
-    #undef getc
-}
- 
-namespace OUT {
-    template < typename T > inline void put(T x) {
-        static std::streambuf * outbuf = cerr.rdbuf();
-        static char stack[21];
-        static int top = 0;
-        if (x < 0) {
-            outbuf -> sputc('-');
-            x = -x;
-        }
-        if (!x) {
-            outbuf -> sputc('0');
-            outbuf -> sputc('\n');
-            return;
-        }
-        while (x) {
-            stack[++top] = x % 10 + '0';
-            x /= 10;
-        }
-        while (top) {
-            outbuf -> sputc(stack[top]);
-            --top;
-        }
-        outbuf -> sputc('\n');
-    }
-    inline void putc(const char ch) {
-        static std::streambuf * outbuf = cerr.rdbuf();
-        outbuf -> sputc(ch);
-    }
-    template < typename T > inline void put(const char ch, T x) {
-        static std::streambuf * outbuf = cerr.rdbuf();
-        static char stack[21];
-        static int top = 0;
-        if (x < 0) {
-            outbuf -> sputc('-');
-            x = -x;
-        }
-        if (!x) {
-            outbuf -> sputc('0');
-            outbuf -> sputc(ch);
-            return;
-        }
-        while (x) {
-            stack[++top] = x % 10 + '0';
-            x /= 10;
-        }
-        while (top) {
-            outbuf -> sputc(stack[top]);
-            --top;
-        }
-        outbuf -> sputc(ch);
-    }
-    template < typename T, typename...Args > inline void put(T a, Args...args) {
-        put(a);
-        put(args...);
-    }
-    template < typename T, typename...Args > inline void put(const char ch, T a, Args...args) {
-        put(ch, a);
-        put(ch, args...);
-    }
-}
-using IN::redi;
-using OUT::put;
-using OUT::putc;
-namespace azcy{
-    using namespace std;
-    bool debug_switch=1;
-    void auto_init(){
-        ios::sync_with_stdio(0);
-        cin.tie(0);cout.tie(0);
-    }
-    void qfopen(string INPUT_FILE_NAME,string OUTPUT_FILE_NAME){
-        freopen(INPUT_FILE_NAME.data(),"r",stdin);
-        freopen(OUTPUT_FILE_NAME.data(),"w",stdout);
-    }
-    template<typename T>
-    void dbgo(T x){
-        cerr<<x<<" ";
-    }
-    template<typename First,typename... Rest>
-    void dbgo(First first,Rest... rest){
-        cerr<<first<<" ";
-        dbgo(rest...);
-    }  
-    template<typename First,typename... Rest>
-    void dbg(First first,Rest... rest){
-        if(!debug_switch)return ;
-        cerr<<first<<" ";
-        dbgo(rest...);
-        cerr<<"\n";
-    }//made by _azcy
-template<typename T>
-    void dbg(T x)
+#define ll long long
+const int N=1e5+10;
+#define sz(a) ((int)a.size())
+struct SGT
+{
+    int l[N << 2], r[N << 2];
+    ll val[N << 2], tag[N << 2];
+#define ls(x) (x << 1)
+#define rs(x) (x << 1 | 1)
+    void Pushup(int p) { val[p] = val[ls(p)] + val[rs(p)]; }
+    void Add(int p, ll v)
     {
-        if (!debug_switch)
-            return;
-        cerr << x << "\n";
+        tag[p] += v;
+        val[p] += v * (r[p] - l[p] + 1);
     }
-}using namespace azcy;
-const int N=1e4+10;
-int main(){
-//ios::sync_with_stdio(0);
-    
+    void Pushdown(int p)
+    {
+        if (tag[p])
+            Add(ls(p), tag[p]), Add(rs(p), tag[p]), tag[p] = 0;
+    }
+    void Build(int p, int x, int y)
+    {
+        l[p] = x, r[p] = y;
+        if (x == y)
+        {
+            val[p] = 0;
+            return;
+        }
+        int mid = (x + y) >> 1;
+        Build(ls(p), x, mid), Build(rs(p), mid + 1, y);
+        Pushup(p);
+    }
+    void Update(int p, int x, int y, ll v)
+    {
+        if (l[p] >= x && r[p] <= y)
+        {
+            Add(p, v);
+            return;
+        }
+        Pushdown(p);
+        int mid = (l[p] + r[p]) >> 1;
+        if (x <= mid)
+            Update(ls(p), x, y, v);
+        if (y > mid)
+            Update(rs(p), x, y, v);
+        Pushup(p);
+    }
+    ll Query(int p, int x, int y)
+    {
+        if (l[p] >= x && r[p] <= y)
+            return val[p];
+        Pushdown(p);
+        int mid = (l[p] + r[p]) >> 1;
+        ll res = 0;
+        if (x <= mid)
+            res += Query(ls(p), x, y);
+        if (y > mid)
+            res += Query(rs(p), x, y);
+        return res;
+    }
+} T[26];
+ll ans;
+string s;
+int main()
+{
+    // ios::sync_with_stdio(0);
+    cin >> s;
+    int n = sz(s),ch;
+    s = '#' + s;
+    for (int i = 0; i < 26; ++i)
+        T[i].Build(1, 1, n);
+    for (int i = 1; i <= n; ++i)
+    {
+        ch = s[i] - 'A';
+        ans += T[ch].Query(1, 1, max(1, i - 1));
+        T[ch].Update(1, min(i + 1, n), n, 1);
+    }
+    cout << ans;
 }

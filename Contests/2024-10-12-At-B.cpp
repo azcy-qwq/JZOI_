@@ -127,7 +127,21 @@ template<typename T>
     }
 }using namespace azcy;
 const int N=1e4+10;
+int n;
+pair<double,double> pdd[N];
+long double ans;
 int main(){
 //ios::sync_with_stdio(0);
-    
+    cin>>n;
+    double x=0,y=0;
+    for(int i=1;i<=n;++i){
+        cin>>pdd[i].first>>pdd[i].second;
+    }
+    pdd[n+1]={0,0};
+    for(int i=1;i<=n+1;++i){
+        ans+=sqrt(pow(pdd[i].first-x,2)+pow(pdd[i].second-y,2));
+        x=pdd[i].first;
+        y=pdd[i].second;
+    }
+    cout<<fixed<<setprecision(20)<<ans;
 }

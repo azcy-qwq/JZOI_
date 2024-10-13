@@ -127,7 +127,15 @@ template<typename T>
     }
 }using namespace azcy;
 const int N=1e4+10;
+string s;
+int n,ans;
 int main(){
 //ios::sync_with_stdio(0);
-    
+    cin>>n>>s;
+    s+='***';
+    for(int i=0;i<s.length()-2;++i){
+        if(s[i]=='#'&&s[i+2]=='#'&&s[i+1]=='.')
+            ++ans;
+    }
+    cout<<ans;
 }
