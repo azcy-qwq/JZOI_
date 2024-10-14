@@ -8,6 +8,8 @@
             "args": [],
             "stopAtEntry": false,
             "cwd": "C:/mingw64/bin",
+            // "cwd": "${fileDirname}",
+            // "console": "integratedTerminal",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",

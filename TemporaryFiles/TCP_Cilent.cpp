@@ -23,10 +23,10 @@ int main()
 	addrSrv.sin_port = htons(5099);
 	string addrs;
 	cin >> addrs;
-	addrSrv.sin_addr.S_un.S_addr = inet_addr(addrs.data());
-	SOCKET sockClient = socket(AF_INET, SOCK_STREAM, 0);
+	
 	while (1)
-	{
+	{	addrSrv.sin_addr.S_un.S_addr = inet_addr(addrs.data());
+		SOCKET sockClient = socket(AF_INET, SOCK_STREAM, 0);
 		if (SOCKET_ERROR == sockClient)
 		{
 			printf("Socket() error:%d", WSAGetLastError());
@@ -47,10 +47,10 @@ int main()
 		char *buffSend = s.data();
 		send(sockClient, buffSend, strlen(buffSend) + 1, 0);
 		// closesocket(sockClient);
-		WSACleanup();
+//		WSACleanup();
 		//    	printf("%d", strlen(buffSend) + 1);
 
-		system("pause");
+//		system("pause");
 	}
 	// 创建套接字
 }

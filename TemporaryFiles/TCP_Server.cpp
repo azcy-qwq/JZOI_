@@ -56,6 +56,7 @@ main()
     // 发送数据
     while (1)
     {
+    	cout<<time(0)<<endl;
         string s;
         cin >> s;
         char *buf = s.data();
