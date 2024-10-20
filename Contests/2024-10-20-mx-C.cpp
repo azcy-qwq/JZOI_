@@ -127,7 +127,27 @@ template<typename T>
     }
 }using namespace azcy;
 const int N=1e4+10;
+int n,q,c1,c2,w1,w2,a[N],op,x,y;
 int main(){
-//ios::sync_with_stdio(0);
-    
+ios::sync_with_stdio(0);
+
+    cin>>n>>q>>c1>>c2>>w1>>w2;
+    for(int i=1;i<=n;++i)
+        cin>>a[i];
+    for(int i=1;i<=q;++i){
+        cin>>op>>x>>y;
+        if(op==1){
+            a[x]+=y;
+        }else{
+            if(c1>=y-x+1){
+                // bool flag=true;
+                int temp=0;
+                for(int j=x;j<=y;++j){
+                    temp+=a[j];
+                }
+                if(temp<=w1) cout<<"cont\n";
+                else cout<<"tetris\n";
+            }else cout<<"tetris\n";
+        }
+    }
 }

@@ -1,6 +1,5 @@
 #include<bits/stdc++.h>
 using namespace std;
- 
 namespace IN {
     #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
@@ -27,7 +26,6 @@ namespace IN {
     }
     #undef getc
 }
- 
 namespace OUT {
     template < typename T > inline void put(T x) {
         static std::streambuf * outbuf = cerr.rdbuf();
@@ -126,8 +124,39 @@ template<typename T>
         cerr << x << "\n";
     }
 }using namespace azcy;
-const int N=1e4+10;
+const int N=3e6+10;
+int T,n,a[3][N],dp[N],m,c;
 int main(){
-//ios::sync_with_stdio(0);
-    
+
+ios::sync_with_stdio(0);
+
+    cin>>c>>T;
+    while(T--){
+        char ch;
+        cin>>n>>m;
+        for(int i=1;i<=2;++i)
+            for(int j=1;j<=n;++j){
+                cin>>ch;
+                a[i][j]=ch-'0';
+            }
+        if(c==12||c==13){
+            int sum=0,ans=INT_MIN;
+            // memset(dp,0,sizeof(dp));
+            for(int i=1;i<=n;++i){
+                if(sum>0){
+                    sum+=a[1][i];
+                }else{
+                    sum=a[1][i];
+                }ans=max(ans,sum);
+            }
+            cout<<ans*2<<"\n";
+        }else if(c==14||c==15){
+            int cnt=n;
+            for(int i=2;i<=n;++i){
+                if(a[1][i]!=a[1][i-1]) --cnt;
+            }
+            cout<<max(0,cnt-2*m)<<"\n";
+        }else cout<<2*rand()%(n/2)<<"\n";
+
+    }
 }
