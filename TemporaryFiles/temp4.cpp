@@ -1,96 +1,138 @@
-#include<iostream>
-#include<cstdio>
-#include<cstring>
-#include<cmath>
-#include<algorithm>
-#include<queue>
-#include<vector>
 #include<bits/stdc++.h>
 using namespace std;
-const int N=1e6+10;
-using namespace std;
-#define ll long long
-#define ull unsigned long long
-ll n,m;
-bitset<N> a;
-ll cnt1,cnt0;
-ll temp;
-char ch;
-ll check() {
-	ll ans=0;
-	a[n+1]=0;
-	for(int i=1; i<=n; ++i) {
-		if(a[i]!=a[i+1])
-			ans+=i;
-	}
-	return ans;
-}
-main() {
-//	freopen("a.in","r",stdin);
-//    freopen("a.out","w",stdout);
-//	freopen("binary.out","w",stdout);
-	// ios::sync_with_stdio(0);
-	// cin.tie(0);
-	cin>>n>>m;
-	for(int i=1; i<=n; ++i) {
-		cin>>ch;
-		a[n-i+1]=ch-'0';
-		cnt1+=ch-'0';
-	}
-	cnt0=n-cnt1;
-	for(int i=1; i<=m; ++i) {
-		cin>>temp;
-		if(temp>=0) {
-			if(temp>=cnt0+1) {
-//				temp-=cnt0+1;
-//				temp%=(n+1);
-				a.set();
-				cnt0=0,cnt1=n;
-//				for(int j=1;j<=temp;++j)
-//					a[j]=1,++cnt1,--cnt0;
-			} else {
-				for(int j=1; j<=n; ++j) {
-					if(temp==0)
-						break;
-					if(a[j]==0) {
-//						cout<<j<<" ";
-						a[j]=1;
-						cnt0--;
-						cnt1++;
-						--temp;
-					}
-				}
-			}
-		} else {
-			temp=temp*-1;
-			if(temp>=cnt1+1) {
-//				temp-=cnt1+1;
-//				temp%=n+1;
-				a.reset();
-//				a.reset();
-				a[n+1]=0;
-				cnt1=0;
-				cnt0=n;
-//				for(int j=1;j<=temp;++j){
-//					++cnt0,--cnt1;
-//					a[j]=0;
-//				}
-			} else {
-				for(int j=1; j<=n; ++j) {
-					if(temp==0)
-						break;
-					if(a[j]==1) {
-						++cnt0,--cnt1;
-						a[j]=0;
-						--temp;
-					}
-				}
-			}
+ 
+namespace IN {
+	#define MAX_INPUT 25000003
+	#define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
+	char buf[MAX_INPUT], * p1, * p2;
+	template < typename T > inline bool redi(T & x) {
+		static std::streambuf * inbuf = cin.rdbuf();
+		x = 0;
+		register int f = 0, flag = false;
+		register char ch = getc();
+		while (!std::isdigit(ch)) {
+			if (ch == '-') f = 1;
+			ch = getc();
 		}
-//        for(int i=n;i>=1;--i)
-//            cout<<a[i];
-//            cout<<endl;
-		cout<<check()<<'\n';
+		if (std::isdigit(ch)) x = x * 10 + ch - '0', ch = getc(), flag = true;
+		while (std::isdigit(ch)) {
+			x = x * 10 + ch - 48;
+			ch = getc();
+		}
+		x = f ? -x : x;
+		return flag;
 	}
-	return 0;
+	template < typename T, typename...Args > inline bool redi(T & a, Args & ...args) {
+		return redi(a) && redi(args...);
+	}
+	#undef getc
+}
+ 
+namespace OUT {
+	template < typename T > inline void put(T x) {
+		static std::streambuf * outbuf = cerr.rdbuf();
+		static char stack[21];
+		static int top = 0;
+		if (x < 0) {
+			outbuf -> sputc('-');
+			x = -x;
+		}
+		if (!x) {
+			outbuf -> sputc('0');
+			outbuf -> sputc('\n');
+			return;
+		}
+		while (x) {
+			stack[++top] = x % 10 + '0';
+			x /= 10;
+		}
+		while (top) {
+			outbuf -> sputc(stack[top]);
+			--top;
+		}
+		outbuf -> sputc('\n');
+	}
+	inline void putc(const char ch) {
+		static std::streambuf * outbuf = cerr.rdbuf();
+		outbuf -> sputc(ch);
+	}
+	template < typename T > inline void put(const char ch, T x) {
+		static std::streambuf * outbuf = cerr.rdbuf();
+		static char stack[21];
+		static int top = 0;
+		if (x < 0) {
+			outbuf -> sputc('-');
+			x = -x;
+		}
+		if (!x) {
+			outbuf -> sputc('0');
+			outbuf -> sputc(ch);
+			return;
+		}
+		while (x) {
+			stack[++top] = x % 10 + '0';
+			x /= 10;
+		}
+		while (top) {
+			outbuf -> sputc(stack[top]);
+			--top;
+		}
+		outbuf -> sputc(ch);
+	}
+	template < typename T, typename...Args > inline void put(T a, Args...args) {
+		put(a);
+		put(args...);
+	}
+	template < typename T, typename...Args > inline void put(const char ch, T a, Args...args) {
+		put(ch, a);
+		put(ch, args...);
+	}
+}
+using IN::redi;
+using OUT::put;
+using OUT::putc;
+namespace azcy{
+	using namespace std;
+	bool debug_switch=1;
+	void auto_init(){
+		ios::sync_with_stdio(0);
+		cin.tie(0);cout.tie(0);
+	}
+	void qfopen(string INPUT_FILE_NAME,string OUTPUT_FILE_NAME){
+		freopen(INPUT_FILE_NAME.data(),"r",stdin);
+		freopen(OUTPUT_FILE_NAME.data(),"w",stdout);
+	}
+	template<typename T>
+	void dbgo(T x){
+		cerr<<x<<" ";
+	}
+	template<typename First,typename... Rest>
+	void dbgo(First first,Rest... rest){
+		cerr<<first<<" ";
+		dbgo(rest...);
+	}  
+	template<typename First,typename... Rest>
+	void dbg(First first,Rest... rest){
+		if(!debug_switch)return ;
+		cerr<<first<<" ";
+		dbgo(rest...);
+		cerr<<"\n";
+	}//made by _azcy
+template<typename T>
+	void dbg(T x)
+	{
+		if (!debug_switch)
+			return;
+		cerr << x << "\n";
+	}
+}using namespace azcy;
+const int N=1e4+10;
+set<int> s;
+int main(){
+//ios::sync_with_stdio(0);
+	s.insert(-2);
+	s.insert(-3);
+	s.insert(-5);
+	cout<<(*s.lower_bound(-8))*-1;
+	cout<<(*s.lower_bound(-2))*-1;
 }
