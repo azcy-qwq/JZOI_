@@ -6,7 +6,6 @@ class RBTreeMap
 {
 private:
     using USize = size_t;
-
     Compare compare = Compare();
 
 public:
@@ -1407,7 +1406,7 @@ using namespace std;
 map<int,int> rmp;
 mt19937 rnd(time(0));
 #endif // RBTREE_MAP_HPP
-main()
+signed main()
 {
     for(int i=1;i<=(int)2e5;++i)
         rmp[rnd()]=rnd();
