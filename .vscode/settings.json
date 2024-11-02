@@ -1,3 +1,7 @@
 {
-    "C_Cpp.legacyCompilerArgsBehavior": false
+    "C_Cpp.legacyCompilerArgsBehavior": false,
+    "files.associations": {
+        "iostream": "cpp",
+        "iosfwd": "cpp"
+    }
 }
