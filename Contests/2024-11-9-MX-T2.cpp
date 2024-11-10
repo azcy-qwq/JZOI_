@@ -1,5 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
+ 
 namespace IN {
     #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
@@ -26,6 +27,7 @@ namespace IN {
     }
     #undef getc
 }
+ 
 namespace OUT {
     template < typename T > inline void put(T x) {
         static std::streambuf * outbuf = cerr.rdbuf();
@@ -124,106 +126,84 @@ template<typename T>
         cerr << x << "\n";
     }
 }using namespace azcy;
+#define int long long
 const int N=1e4+10;
-const int inf=LONG_LONG_MIN+1145;
-class sgt_AS{
-    public:
-        long long a[N<<2];
-    private:
-        long long lazy[N<<2],tree[N<<2],lazy2[N<<2];
-        int l[N<<2],r[N<<2];
-        void build_tree(int id,int x,int y){
-            lazy2[id]=inf;
-            l[id]=x;
-            r[id]=y;
-            if(x==y){
-                tree[id]=a[x];
-                return;
+int n,m;
+pair<int,int> a[N],b[N],c[N];
+typedef pair<int,int> pii;
+bool cmp(pii a,pii b){
+    if(a.first-a.second==b.first-b.second) return a<b;
+    return a.first-a.second<b.first-b.second;
+}
+bool cmp2(pii a,pii b){
+    return a.second>b.second;
+}
+queue<int> q;
+bool flag1=1,flag2=1;
+signed main(){
+    // freopen("buy5.in","r",stdin);
+ios::sync_with_stdio(0);
+    cin>>n>>m;
+    for(int i=1;i<=n;++i){
+        cin>>a[i].first>>a[i].second;
+        if(a[i].first!=a[i].second) flag1=0;
+    }for(int i=1;i<=m;++i){
+        cin>>b[i].first>>b[i].second;
+        q.push(i);
+    }
+    sort(a+1,a+n+1,cmp);
+    for(int i=1;i<=n;++i){
+        c[i]={a[i].second,0};
+    }
+    sort(b+1,b+m+1,cmp2);
+    // for(int i=1;i<=n;++i)
+    //     dbg(i,a[i].first,a[i].second,"_");
+    // for(int i=1;i<=m;++i){
+    //     dbg(i,b[i].first,b[i].second);
+    // }
+    if(n>=1e5){
+        long long ans=0;
+        {
+            for(int i=1;i<=n;++i)
+                ans+=a[i].first;
+            for(int i=1;i<=min(n,m);++i){
+                ans-=b[i].second;
             }
-            int mid=(x+y)>>1;
-            build_tree(id<<1,x,mid);
-            build_tree(id<<1|1,mid+1,y);
-            tree[id]=max(tree[id<<1],tree[id<<1|1]);
-        }
-        void push_down2(int id){
-            if(lazy2[id]!=inf){
-                // int mid=(r[id]+l[id])>>1;
-                lazy[id<<1]=0;
-                lazy2[id<<1]=lazy2[id];
-                tree[id<<1]=lazy2[id];
-                lazy [id<<1|1]=0;
-                lazy2[id<<1|1]=lazy2[id];
-                tree [id<<1|1]=lazy2[id];
-                lazy2[id]=inf;
-            }
-        }
-        void push_down(int id){
-            push_down2(id);
-            if(lazy[id]){
-                // int mid=(r[id]+l[id])>>1;
-                lazy[id<<1]+=lazy[id];
-                tree[id<<1]+=lazy[id];
-                lazy[id<<1|1]+=lazy[id];
-                tree[id<<1|1]+=lazy[id];
-                lazy[id]=0;
-            }
-        }void push_up(int id){
-            tree[id]=max(tree[id<<1],tree[id<<1|1]);
-        }void update(int id,int x,int y,long long v){
-            if(l[id]>=x&&r[id]<=y){
-                push_down2(id);
-                tree[id]+=v;
-                lazy[id]+=v;
-                return ;
-            }push_down(id);
-            int mid=(l[id]+r[id])>>1;
-            if(x<=mid) update(id<<1,x,y,v);
-            if(y>mid) update(id<<1|1,x,y,v);
-            push_up(id);
-        }void update2(int id,int x,int y,long long v){
-            if(l[id]>=x&&r[id]<=y){
-                tree[id]=v;
-                lazy2[id]=v;
-                lazy[id]=0;
-                return ;
-            }push_down(id);
-            int mid=(l[id]+r[id])>>1;
-            if(x<=mid) update2(id<<1,x,y,v);
-            if(y>mid) update2(id<<1|1,x,y,v);
-            push_up(id);
+            cout<<ans;
+            return 0;
         }
         
-        long long query(int id,int x,int y){
-            if(x<=l[id]&&y>=r[id]) return tree[id];
-            push_down(id);
-            long long ans=LONG_LONG_MIN;
-            int mid=(l[id]+r[id])>>1;
-            if(x<=mid) ans=max(ans,query(id<<1,x,y));
-            if(y>mid) ans=max(ans,query(id<<1|1,x,y));
-            return ans;
-        }
-    public:
-        void BuildTree(int len){
-            build_tree(1,1,len);
-        }void Update(int L,int R,long long v){
-            update(1,L,R,v);
-        }long long Query(int L,int R){
-            return query(1,L,R);
-        }void Update2(int L,int R,long long v){
-            update2(1,L,R,v);
-        }
-}miku;
-pair<int,int> pii;
-int n,m,q,op,x,y,xa,ya,temp1,temp2;
-int main(){
-//ios::sync_with_stdio(0);
-    cin>>n>>m>>q;
-    while(q--){
-        cin>>op>>x>>y;
-        if(op==1){
-            
-        }else{
-            cin>>xa>>ya;
+    }
+    while(!q.empty()){
+        int temp=q.front();
+        q.pop();
+        if(temp==0) continue;
+        // dbg(temp);
+        for(int i=1;i<=n;++i){
+            if(b[temp].first<=a[i].first){
+                if(a[i].first-b[temp].second<c[i].first){
+                    dbg(c[i].second);
+                    q.push(c[i].second);
+                    c[i].first=a[i].first-b[temp].second;
+                    c[i].second=temp;
+                    break;
+                }
+            }
         }
     }
+    long long ans=0;
+    for(int i=1;i<=n;++i){
+        ans+=c[i].first;
+        // dbg(i,c[i].first,c[i].second,a[i].first,a[i].second);
+    }
+    cout<<ans;
 }
+/*
+
+1 2 0 4 2 
+2 1 3 5 2
+3 3 0 6 3
+4 4 0 6 4
+5 3 4 7 5
+
+*/
