@@ -1,7 +1,8 @@
 #include<bits/stdc++.h>
 using namespace std;
- 
-namespace IN {
+#define int long long
+// int n=MAX_INPUT
+ namespace IN {
     #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
     char buf[MAX_INPUT], * p1, * p2;
@@ -126,13 +127,64 @@ template<typename T>
         cerr << x << "\n";
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
-int main(){
-//ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+const int N=1e6+10;
+int tree[N],lazy[N],a[N],n,m,op,val,xx,rr;
+void build_tree(int id,int l,int r){
+    if(l==r){
+        tree[id]=a[l];
+        return ;
+    } int mid=(l+r)>>1;
+    build_tree(id<<1,l,mid);
+    build_tree(id<<1|1,mid+1,r);
+    tree[id]=tree[id<<1]+tree[id<<1|1];
+}
+void push_down(int id,int l,int r){
+    if(lazy[id]){
+        lazy[id<<1]+=lazy[id];
+        lazy[id<<1|1]+=lazy[id];
+        int mid=(l+r)>>1;
+        tree[id<<1]+=lazy[id]*(mid-l+1);
+        tree[id<<1|1]+=lazy[id]*(r-mid);
+        lazy[id]=0;
+    }
+}void push_up(int id){
+    tree[id]=tree[id<<1]+tree[id<<1|1];
+}
+void update(int id,int l,int r,int x,int y,int v){
+    if(l>=x&&r<=y){
+        lazy[id]+=v;
+        tree[id]+=(r-l+1)*v;
+        return ;
+    }
+    int mid=(l+r)>>1;
+    // lazy[id]+=v;
+    push_down(id,l,r);
+    if(x<=mid) update(id<<1,l,mid,x,y,v);
+    if(y>mid) update(id<<1|1,mid+1,r,x,y,v);
+    push_up(id);
+}int query(int id,int l,int r,int x,int y){
+    if(l>=x&&r<=y) return tree[id];
+    push_down(id,l,r);
+    int mid=(l+r)>>1,ans=0;
+    if(x<=mid) ans+=query(id<<1,l,mid,x,y);
+    if(y>mid) ans+=query(id<<1|1,mid+1,r,x,y);
+    return ans;
+}
+signed main(){
+    // freopen("P3374_2.in","r",stdin);
+    ios::sync_with_stdio(0);
+    cin>>n>>m;
+    for(int i=1;i<=n;++i)
+        cin>>a[i];
+    build_tree(1,1,n);
+    for(int i=1;i<=m;++i){
+        cin>>op>>xx>>rr;
+        assert(op<=2);
+        if(op==1){
+            // cin>>val;
+            update(1,1,n,xx,xx,rr);
+        }else{
+            cout<<query(1,1,n,xx,rr)<<'\n';
+        }
     }
 }

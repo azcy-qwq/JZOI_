@@ -126,13 +126,52 @@ template<typename T>
         cerr << x << "\n";
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
-int main(){
-//ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+const int N=7e2+10;
+bitset<N> vis[N];
+bitset<N> dvis[N];
+int n,m,h[N][N],top,ans;
+pair<int,pair<int,int> > loc[N*N];
+pair<int,int> dir[9]={{0,1},{0,-1},{1,0},{-1,0},{1,1},{1,-1},{-1,1},{-1,-1}};
+bool check(int x,int y){
+    if(dvis[x][y]) return 0;
+    for(int i=0;i<8;++i){
+        if(h[x+dir[i].first][y+dir[i].second]>h[x][y]) return 0;
+        // if(dvis[x+dir[i].first][y+dir[i].second]&&h[x+dir[i].first][y+dir[i].second]==h[x][y]) return 0;
     }
+    return 1;
+} 
+void dfs(int x,int y){
+    dvis[x][y]=1;
+    int tx,ty;
+    for(int i=0;i<8;++i){
+        tx=x+dir[i].first,ty=y+dir[i].second;
+        if(tx<=0||ty<=0||tx>n||ty>m) continue;
+        if(h[tx][ty]<=h[x][y]&&(!dvis[tx][ty]))
+            dfs(tx,ty);
+    }
+} 
+int main(){
+    // freopen("P2919_2.in","r",stdin);
+ios::sync_with_stdio(0);
+    cin>>n>>m;
+    // dbg(n,m);
+    for(int i=1;i<=n;++i){
+        for(int j=1;j<=m;++j){
+            cin>>h[i][j];
+            loc[++top]={h[i][j],{i,j}};
+        }
+    }
+    // dbg(top);
+    sort(loc+1,loc+top+1,greater<pair<int,pair<int,int> > >());
+    for(int i=1;i<=top;++i){
+
+        if(check(loc[i].second.first,loc[i].second.second)&&
+          (!dvis[loc[i].second.first][loc[i].second.second])){
+            // for(int i=1;i<=n;++i)
+            //     vis[i].reset();
+            ans++;
+            dfs(loc[i].second.first,loc[i].second.second);
+        }
+    }
+    cout<<ans;
 }

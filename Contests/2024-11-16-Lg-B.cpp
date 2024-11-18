@@ -1,6 +1,5 @@
 #include<bits/stdc++.h>
 using namespace std;
- 
 namespace IN {
     #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
@@ -27,7 +26,6 @@ namespace IN {
     }
     #undef getc
 }
- 
 namespace OUT {
     template < typename T > inline void put(T x) {
         static std::streambuf * outbuf = cerr.rdbuf();
@@ -124,15 +122,57 @@ template<typename T>
         if (!debug_switch)
             return;
         cerr << x << "\n";
+    }template<typename T>
+    inline T maxm(T a,T b){
+        return (a>b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First maxm(First first,Rest... rest){
+        return maxm(first,maxm(rest...));
+    }
+    template<typename T>
+    inline T minm(T a,T b){
+        return (a<b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First minm(First first,Rest... rest){
+        return minm(first,minm(rest...));
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
+const int N=1e6+10;
+int n,m,r,u,v,dis[N];
+vector<int> nei[N];
+void bfs(){
+    queue<int> q;
+    q.push(r);
+    while(q.size()){
+        int cur=q.front();
+        q.pop();
+        for(int to:nei[cur]){
+            if(dis[to]) continue;
+            dis[to]=dis[cur]+1;
+            q.push(to);
+        }
+    }
+}
 int main(){
 //ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+    auto_init();
+    cin>>n>>m>>r;
+    for(int i=1;i<=m;++i){
+        cin>>u>>v;
+        nei[u].push_back(v);
+        nei[v].push_back(u);
     }
+    int q;
+    cin>>q;
+    dis[r]=1;
+    bfs();
+    cout<<"I'm here!\n";
+    for(int i=1;i<=q;++i){
+        cin>>u>>v;
+        if(dis[u]<=dis[v]) cout<<"Terry\n";
+        else cout<<"Jom\n";
+    }
+        
 }

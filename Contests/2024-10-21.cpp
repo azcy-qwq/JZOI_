@@ -126,13 +126,36 @@ template<typename T>
         cerr << x << "\n";
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
-int main(){
-//ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+const int N=1e5+10;
+int n,ans;
+bitset<N> bs;
+void dfs(int x,int cs){
+    if(x==1){
+        ++ans;
+        ans%=998244353;
+        return ;
     }
+    if(x<n&&cs!=2&&bs[x+1]==0){
+        bs[x+1]=1;
+        dfs(x+1,1);
+        bs[x+1]=0;
+    }if(bs[x-1]==0){
+        bs[x-1]=1;
+        dfs(x-1,0);
+        bs[x-1]=0;
+    }for(int i=2;i<=x;++i){
+        if(x%i!=0) continue;
+        if(bs [x/i]==0){
+            bs[x/i]=1;
+            dfs(x/i,((cs==1)?2:0));
+            bs[x/i]=0;
+        }
+    }
+}
+int main(){
+ios::sync_with_stdio(0);
+    cin>>n;
+    bs[n]=1;
+    dfs(n,0);
+    cout<<ans;
 }

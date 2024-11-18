@@ -127,12 +127,29 @@ template<typename T>
     }
 }using namespace azcy;
 const int N=1e4+10;
-int c,t,n,m;
-int main(){
+int calc(int x,int c){
+    bool flag=(1<<(x-1))&c;
+    if(x<=1) return 0;
+    for(int i=x-1;i>=0;--i){
+        if(flag)
+            if((1<<(i-1))&c) return i;
+        if(!flag)
+            if(!((1<<(i-1))&c)) return i;
+    }return 0;
+}
+#define int long long
+int T,n,a[N],temp,ans;
+int dp[N][N];
+signed main(){
 //ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+    // cout<<calc(5,10);
+    cin>>T;
+    while(T--){
+        cin>>n;
+        for(int i=1;i<=n;++i)
+            cin>>a[i];
+        for(int i=1;i<=n;++i){
+            
+        }
     }
 }

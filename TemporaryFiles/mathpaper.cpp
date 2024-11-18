@@ -127,12 +127,44 @@ template<typename T>
     }
 }using namespace azcy;
 const int N=1e4+10;
-int c,t,n,m;
-int main(){
-//ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+#define int long long
+#define MTL 3
+int ans,cnt;
+struct cs{
+    int lost[3],dead=0;
+    int cur[2],oth;
+    cs(){
+        lost[0]=lost[1]=lost[2]=dead=0;
+        cur[0]=0,cur[1]=1,oth=2;
     }
+}init;
+void dfs(cs a,int rod){
+    if(a.dead>=2){
+        if(a.lost[2]<MTL) ans+=pow(2,32-rod);
+        // ++cnt;
+        cnt+=pow(2,32-rod);
+        return ;
+    }
+    cs b=a;
+    b.lost[b.cur[0]]++;
+    if(b.lost[b.cur[0]]>=MTL) 
+        b.dead++;
+    if(b.lost[b.oth]<MTL)
+        swap(b.oth,b.cur[0]);
+    dfs(b,rod+1);
+    b=a;
+    b.lost[b.cur[1]]++;
+    if(b.lost[b.cur[1]]>=MTL) 
+        b.dead++;
+    if(b.lost[b.oth]<MTL)
+        swap(b.oth,b.cur[1]);
+    dfs(b,rod+1);
+    // dbg(cnt);
+    // if(rod<=3)
+    //     dbg(ans/__gcd(ans,cnt),'/',cnt/__gcd(ans,cnt),' ',rod);
+}
+signed main(){
+//ios::sync_with_stdio(0);
+    dfs(init,1);
+    cout<<ans/__gcd(ans,cnt)<<"/"<<cnt/__gcd(ans,cnt);
 }

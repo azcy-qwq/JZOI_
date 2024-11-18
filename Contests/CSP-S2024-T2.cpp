@@ -126,13 +126,75 @@ template<typename T>
         cerr << x << "\n";
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
+const double eps=1e-9;
+const int N=1e6+10;
+struct car{
+    long double d,a,v0;
+}inp[N],cs[N];
+int T,n,m,L,V,p[N],ans,top,stop,aa,bb,cc;
+pair<int,int> seg[N];
+long double calc(car ca,long double x){
+    if(2*ca.a*(x-ca.d)+ca.v0*ca.v0<=0) return 0;
+    return sqrt(2*ca.a*(x-ca.d)+ca.v0*ca.v0);
+}
 int main(){
-//ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+ios::sync_with_stdio(0);
+    // freopen("detect5.in","r",stdin);
+    // freopen("detect5.out","w",stdout);
+    cin>>T;
+    while(T--){
+        ans=stop=0;
+        bool scflag=1;
+        cin>>n>>m>>L>>V;
+        for(int i=1;i<=n;++i){
+            // cin>>inp[i].d>>inp[i].v0>>inp[i].a;
+            cin>>aa>>bb>>cc;
+            inp[i].d=aa;
+            inp[i].v0=bb;
+            inp[i].a=cc;
+            if(inp[i].a) scflag=0;
+        }for(int i=1;i<=m;++i){
+            cin>>aa;
+            p[i]=aa;
+            // cin>>p[i];
+        }
+        // continue;
+        if(scflag){
+            for(int i=1;i<=n;++i){
+                if(inp[i].d>p[m]&&inp[i].v0>V) ++ans;
+            }cout<<ans<<" "<<m-(ans>0)<<"\n";
+            continue;
+        }for(int i=1;i<=n;++i){
+            if(inp[i].a>=0){
+                // double temp=calc(inp[i],p[m]);
+                if(calc(inp[i],p[m])-eps<=V||inp[i].d>p[m]) continue;
+                if(inp[i].a==0) seg[++stop].first=lower_bound(p+1,p+m+1,inp[i].d)-p;
+                else seg[++stop].first=upper_bound(lower_bound(p+1,p+m+1,inp[i].d),p+m+1,(V*V-inp[i].v0*inp[i].v0)/inp[i].a/2.0+inp[i].d)-p;
+                seg[stop].second=m;
+                ++ans;
+            }else{
+                // double temp=calc(inp[i],p[lower_bound(p+1,p+m+1,inp[i].d)-p]);
+                if(calc(inp[i],p[lower_bound(p+1,p+m+1,inp[i].d)-p])-eps<=V||inp[i].d>p[m]) continue;
+                seg[++stop].first=lower_bound(p+1,p+m+1,inp[i].d)-p;
+                seg[stop].second=lower_bound(p+1,p+m+1,(V*V-inp[i].v0*inp[i].v0)/2.0/inp[i].a+inp[i].d)-p-1;
+                ++ans;
+            }
+        }sort(seg+1,seg+stop+1);
+        // dbg(stop);
+        cout<<ans<<" ";
+        ans=0;
+        priority_queue<int,vector<int>,greater<int> > pq;
+        for(int i=1,cur=1;i<=m;++i){
+            while(i>=seg[cur].first&&cur<=stop){
+                pq.push(seg[cur].second);
+                cur++;
+                if(cur>stop) break;
+            }if((!pq.empty())&&pq.top()==i){
+                ++ans;
+                while(!pq.empty()) pq.pop();
+            }
+            // if(cur>m) break;
+        }
+        cout<<m-ans<<"\n";
     }
 }

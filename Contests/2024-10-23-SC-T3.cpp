@@ -126,13 +126,83 @@ template<typename T>
         cerr << x << "\n";
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
+const int N=10;
+int T;
+char ch;
+short mp[N][N];
+short tomp[6][6]={0,0,0,0,0,0,
+                 0,1,1,1,1,1,
+                 0,0,1,1,1,1,
+                 0,0,0,2,1,1,
+                 0,0,0,0,0,1,
+                 0,0,0,0,0,0};
+int check(){
+    int temp=0;
+    for(int i=1;i<=5;++i){
+        for(int j=1;j<=5;++j){
+            // if(i==3&&j==3) continue;
+            if(mp[i][j]!=tomp[i][j]) ++temp;
+        }
+    }
+    if(temp>0) --temp;
+    return temp;
+}
+bool legal(int x){
+    return (x>0&&x<=5);
+}
+pair<int,int> dir[9]={{1,-2},{-1,-2},{1,2},{-1,2},{2,1},{2,-1},{-2,-1},{-2,1}};
+bool dfs(int x,int y,int maxm,int step){
+    if(step>=maxm) return (check()==0);
+    int g=check();
+    if(check()+step>maxm) return 0;
+    for(int i=0;i<8;++i){
+        int tox=x+dir[i].first,toy=y+dir[i].second;
+        // bool temp;
+        if(legal(tox)&&legal(toy)){
+            swap(mp[x][y],mp[tox][toy]);
+            // temp=mp[x][y],mp[x][y]=mp[tox][toy],mp[tox][toy]=temp;
+            if(dfs(tox,toy,maxm,step+1)) return true;
+            // temp=mp[x][y],mp[x][y]=mp[tox][toy],mp[tox][toy]=temp;
+            swap(mp[x][y],mp[tox][toy]);
+        }
+    }
+    return false;
+}
 int main(){
-//ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+ios::sync_with_stdio(0);
+    cin>>T;
+    while(T--){
+        int tx,ty;
+        bool flag=0;
+        for(int i=1;i<=5;++i)
+            for(int j=1;j<=5;++j){
+                cin>>ch;
+                if(ch=='1') mp[i][j]=1;
+                else if(ch=='0') mp[i][j]=0;
+                else tx=i,ty=j,mp[i][j]=2;
+            }
+        if(check()==0){
+            cout<<"0\n";
+            continue;
+        }
+        for(int i=1;i<=15;++i){
+            if(dfs(tx,ty,i,0)){
+                flag=1;
+                cout<<i<<"\n";
+                break;
+            }
+        }
+        if(flag==0){
+            cout<<"-1\n";
+        }
     }
 }
+/*
+1
+11111
+01111
+00011
+00001
+0000*
+
+*/

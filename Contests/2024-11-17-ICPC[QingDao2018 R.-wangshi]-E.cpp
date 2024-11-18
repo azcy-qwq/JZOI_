@@ -1,6 +1,5 @@
 #include<bits/stdc++.h>
 using namespace std;
- 
 namespace IN {
     #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
@@ -27,7 +26,6 @@ namespace IN {
     }
     #undef getc
 }
- 
 namespace OUT {
     template < typename T > inline void put(T x) {
         static std::streambuf * outbuf = cerr.rdbuf();
@@ -124,15 +122,70 @@ template<typename T>
         if (!debug_switch)
             return;
         cerr << x << "\n";
+    }template<typename T>
+    inline T maxm(T a,T b){
+        return (a>b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First maxm(First first,Rest... rest){
+        return maxm(first,maxm(rest...));
+    }
+    template<typename T>
+    inline T minm(T a,T b){
+        return (a<b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First minm(First first,Rest... rest){
+        return minm(first,minm(rest...));
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
+const int N=1e5+10;
+typedef long long ll;
+ll n,m,t,d[N],h[N];
+
+ll check(ll stdx){
+    for(int i=0;i<=n;++i) h[i]=0;
+    ll cur=0,step=0,l=1,temp;
+    while(1){
+        if(cur<1){
+            ++cur,h[cur]+=d[cur],++step;
+        }else{
+            while(cur<n-1&&h[cur]>=stdx) ++step,++cur,h[cur]+=d[cur];
+            if(h[n]>=stdx&&h[n-1]>=stdx) break;
+            if(cur<n-1||(cur==n-1&&h[n-1]<stdx)){
+                temp=ceil((double)(stdx-h[cur])/d[cur]);
+                h[cur]+=temp*d[cur];
+                h[cur+1]+=(temp)*d[cur+1];
+                step+=temp*2;
+            }else{
+                ++cur;++step;h[cur]+=d[cur];
+                if(h[n]>=stdx) break;
+                temp=ceil((double)(stdx-h[cur])/d[cur]);
+                step+=temp*2;
+                break;
+            }
+        }
+        // while(h[l]>=stdx&&l<=n) ++l;
+        if(h[n]>=stdx&&h[n-1]>=stdx) break;
+    }return step;
+}
 int main(){
 //ios::sync_with_stdio(0);
-
-    cin>>c>>t;
+    auto_init();
+    cin>>t;
     while(t--){
         cin>>n>>m;
+        for(int i=1;i<=n;++i){
+            cin>>d[i];
+            h[i]=0;
+        }ll l=0,r=1e14,mid,ans;
+        while(r>=l){
+            // dbg(l,r,mid,ans);
+            mid=l+((r-l)>>1);
+            if(check(mid)>m) ans=mid-1,r=mid-1;
+            else ans=mid,l=mid+1;
+        }if(ans<0)ans=0;
+        cout<<ans<<"\n";
     }
+
 }

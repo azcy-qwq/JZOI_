@@ -1,6 +1,5 @@
 #include<bits/stdc++.h>
 using namespace std;
- 
 namespace IN {
     #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
@@ -27,7 +26,6 @@ namespace IN {
     }
     #undef getc
 }
- 
 namespace OUT {
     template < typename T > inline void put(T x) {
         static std::streambuf * outbuf = cerr.rdbuf();
@@ -124,15 +122,72 @@ template<typename T>
         if (!debug_switch)
             return;
         cerr << x << "\n";
+    }template<typename T>
+    inline T maxm(T a,T b){
+        return (a>b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First maxm(First first,Rest... rest){
+        return maxm(first,maxm(rest...));
+    }
+    template<typename T>
+    inline T minm(T a,T b){
+        return (a<b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First minm(First first,Rest... rest){
+        return minm(first,minm(rest...));
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
-int main(){
+#define int long long
+const int N=5e6+10;
+const int PCC=998244353;
+typedef long long ll;
+ll n,p[N],dp[N];
+bool flag1=1;
+bitset<N> vis;
+signed main(){
 //ios::sync_with_stdio(0);
+// n=20;
+    // return 0;
 
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+    auto_init();
+    cin>>n;
+    dp[0]=1;
+    dp[1]=1,dp[2]=2;
+    for(int i=3;i<=n;++i){
+        dp[i]=dp[i-1]+dp[i-2]*(i-1);
+        dp[i]%=PCC;
     }
+    for(int i=1;i<=n;++i){
+        cin>>p[i];
+        if(p[i]!=0) 
+            flag1=0;
+    }if(flag1){
+        ll ans=dp[n];
+            // c=b+a*(i-1);
+            // c%=PCC;
+            // b%=PCC;
+            // a=b;
+            // b=c;
+            // ans=c;
+        cout<<ans;
+        return 0;
+    }for(int i=1;i<=n;++i){
+        if(p[i]==0||vis[i]||p[i]==i) continue;
+        int cnt=0,cur=p[i];
+        while(p[cur]){
+            if(!p[cur]||vis[p[cur]]) break;
+            ++cnt;
+            cur=p[cur],vis[cur]=1;
+        }
+        if(p[cur]&&(cnt&1)){
+            cout<<"0";
+            return 0;
+        }if(!p[cur])
+            p[cur]=i;
+    }
+    int cnt=0;
+    for(int i=1;i<=n;++i) cnt+=(p[i]==0);
+    cout<<dp[cnt];return 0;
 }

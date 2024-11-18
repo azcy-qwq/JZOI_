@@ -1,6 +1,7 @@
 #include<bits/stdc++.h>
+#include<bits/extc++.h>
 using namespace std;
- 
+using namespace __gnu_pbds;
 namespace IN {
     #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
@@ -27,7 +28,6 @@ namespace IN {
     }
     #undef getc
 }
- 
 namespace OUT {
     template < typename T > inline void put(T x) {
         static std::streambuf * outbuf = cerr.rdbuf();
@@ -124,15 +124,54 @@ template<typename T>
         if (!debug_switch)
             return;
         cerr << x << "\n";
+    }template<typename T>
+    inline T maxm(T a,T b){
+        return (a>b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First maxm(First first,Rest... rest){
+        return maxm(first,maxm(rest...));
+    }
+    template<typename T>
+    inline T minm(T a,T b){
+        return (a<b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First minm(First first,Rest... rest){
+        return minm(first,minm(rest...));
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
+const int N=1e6+10;
+__gnu_pbds::priority_queue<int,greater<int> > pq[N];
+__gnu_pbds::priority_queue<int,greater<int> >::point_iterator it[N];
+int n,m,inp,op,x,y,z;
 int main(){
 //ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+    auto_init();
+    cin>>n>>m;
+    for(int i=1;i<=n;++i){
+        cin>>inp;
+        it[i]=pq[i].push(inp);
+    }for(int i=1;i<=m;++i){
+        cin>>op>>x;
+        switch(op){
+            case 0:
+                cin>>y;
+                pq[x].erase(it[y]);
+                break;
+            case 1:
+                cout<<pq[x].top()<<'\n';
+                break;
+            case 2:
+                cin>>y;
+                pq[x].join(pq[y]);
+                break;
+            case 3:
+                cin>>y>>z;
+                pq[x].modify(it[y],z);
+                break;
+            default:
+                break;
+        }
     }
 }

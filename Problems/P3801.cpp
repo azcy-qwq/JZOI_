@@ -214,8 +214,16 @@ class sgt_AS{
         }
 }miku;
 pair<int,int> pii;
-int n,m,q,op,x,y;
+int n,m,q,op,x,y,xa,ya,temp1,temp2;
 int main(){
 //ios::sync_with_stdio(0);
     cin>>n>>m>>q;
+    while(q--){
+        cin>>op>>x>>y;
+        if(op==1){
+            
+        }else{
+            cin>>xa>>ya;
+        }
+    }
 }

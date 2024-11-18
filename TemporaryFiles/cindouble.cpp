@@ -1,8 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
- 
 namespace IN {
-    #define MAX_INPUT 25000003
+    #define MAX_INPUT 100000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
     char buf[MAX_INPUT], * p1, * p2;
     template < typename T > inline bool redi(T & x) {
@@ -27,7 +26,6 @@ namespace IN {
     }
     #undef getc
 }
- 
 namespace OUT {
     template < typename T > inline void put(T x) {
         static std::streambuf * outbuf = cerr.rdbuf();
@@ -124,15 +122,56 @@ template<typename T>
         if (!debug_switch)
             return;
         cerr << x << "\n";
+    }template<typename T>
+    inline T maxm(T a,T b){
+        return (a>b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First maxm(First first,Rest... rest){
+        return maxm(first,maxm(rest...));
+    }
+    template<typename T>
+    inline T minm(T a,T b){
+        return (a<b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First minm(First first,Rest... rest){
+        return minm(first,minm(rest...));
     }
 }using namespace azcy;
 const int N=1e4+10;
-int c,t,n,m;
-int main(){
-//ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+int x;
+// double x;
+inline int read(){
+    int temp=0;
+    char ch='?';
+    while(!isdigit(ch))
+        ch=getchar();
+    while(isdigit(ch)){
+        temp*=10;
+        temp+=(ch-'0');
+        ch=getchar();
     }
+    return temp;
+}
+int read(int &x){
+    cin>>x;
+    return x;
+}
+int sum,n;
+int main(){
+    
+    // ios::sync_with_stdio(0);
+    freopen("input.in","r",stdin);
+    cin>>n;
+    // redi(n);
+    for(int i=1;i<=n;++i){
+        cin>>x;
+        // scanf("%d",&x);
+        // read(x);
+        // x=read();
+        // redi(x);
+        sum+=x;
+    }
+    cout<<sum<<" "<<(double)clock()/CLOCKS_PER_SEC;
 }

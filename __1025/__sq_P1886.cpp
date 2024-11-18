@@ -126,13 +126,44 @@ template<typename T>
         cerr << x << "\n";
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
+const int N=1e6+10;
+int n,k,a[N];
+deque<pair<int,int> > q,q2;
+void insert(int x,int id){
+    
+    while((!q.empty())&&q.back().first<=x){
+        q.pop_back();
+    } while((!q.empty())&&q.front().second+k-1<id){
+        q.pop_front();
+    } 
+    q.push_back({x,id});
+}
+void Insert(int x,int id){
+    while((!q2.empty())&&q2.back().first>=x){
+        q2.pop_back();
+    } while((!q2.empty())&&q2.front().second+k-1<id){
+        q2.pop_front();
+    } 
+    
+    q2.push_back({x,id});
+}
 int main(){
 //ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+    cin>>n>>k;
+    for(int i=1;i<=n;++i){
+        cin>>a[i];
+    }
+    for(int i=1;i<=k-1;++i){
+        Insert(a[i],i);
+    }for(int i=k;i<=n;++i){
+        Insert(a[i],i);
+        cout<<q2.front().first<<" ";
+    }
+    cout<<"\n";
+    for(int i=1;i<=k-1;++i)
+        insert(a[i],i);
+    for(int i=k;i<=n;++i){
+        insert(a[i],i);
+        cout<<q.front().first<<" ";
     }
 }

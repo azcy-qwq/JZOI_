@@ -127,12 +127,20 @@ template<typename T>
     }
 }using namespace azcy;
 const int N=1e4+10;
-int c,t,n,m;
+int cnt;
 int main(){
 //ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+    while(1){
+        ++cnt;
+        system("T2data.exe > T2.in");
+        system("cwzT2.exe < T2.in > T2.out");
+        system("T2.exe < T2.in > T2.ans");
+        _sleep(100);
+        if(system("fc T2.out T2.ans")){
+            cout<<"WA!\n";
+            system("pause");
+        }else{
+            cout<<cnt<<":"<<"Accepted!\n";
+        }
     }
 }

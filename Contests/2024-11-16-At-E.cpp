@@ -1,6 +1,5 @@
 #include<bits/stdc++.h>
 using namespace std;
- 
 namespace IN {
     #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
@@ -27,7 +26,6 @@ namespace IN {
     }
     #undef getc
 }
- 
 namespace OUT {
     template < typename T > inline void put(T x) {
         static std::streambuf * outbuf = cerr.rdbuf();
@@ -124,15 +122,63 @@ template<typename T>
         if (!debug_switch)
             return;
         cerr << x << "\n";
+    }template<typename T>
+    inline T maxm(T a,T b){
+        return (a>b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First maxm(First first,Rest... rest){
+        return maxm(first,maxm(rest...));
+    }
+    template<typename T>
+    inline T minm(T a,T b){
+        return (a<b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First minm(First first,Rest... rest){
+        return minm(first,minm(rest...));
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
+const int N=1e6+10;
+int l[N],r[N],fa[N],c[N],n,q,op,opt,cnt[N],col;
+int getfa(int id){
+    if(id==fa[id]) return id;
+    return fa[id]=getfa(fa[id]);
+}
+void combine(int x,int y){
+    x=getfa(x),y=getfa(y);
+    l[x]=min(l[x],l[y]);
+    r[x]=max(r[x],r[y]);
+    fa[y]=x;
+}
+int getlen(int id){
+    id=getfa(id);
+    return r[id]-l[id]+1;
+}
 int main(){
+        auto_init();
 //ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+    cin>>n>>q;
+    // iota(fa+1,fa+n+1,1);
+    for(int i=1;i<=n;++i)
+        l[i]=r[i]=fa[i]=c[i]=i,cnt[i]=1;
+    while(q--){
+        cin>>op;
+        if(op==1){
+            cin>>opt>>col;
+            opt=getfa(opt);
+            cnt[c[opt]]-=getlen(opt);
+            c[opt]=col;
+            cnt[col]+=getlen(opt);
+            int ll=getfa(l[opt]-1),rr=getfa(r[opt]+1);
+            if(ll&&c[ll]==c[opt]){
+                combine(ll,opt);
+            }if(rr&&c[rr]==col){
+                combine(rr,opt);
+            }
+        }else{
+            cin>>opt;
+            cout<<cnt[opt]<<'\n';
+        }
     }
 }

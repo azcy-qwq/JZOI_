@@ -126,13 +126,84 @@ template<typename T>
         cerr << x << "\n";
     }
 }using namespace azcy;
+#define int long long
 const int N=1e4+10;
-int c,t,n,m;
-int main(){
-//ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
-    }
+int n,m;
+pair<int,int> a[N],b[N],c[N];
+typedef pair<int,int> pii;
+bool cmp(pii a,pii b){
+    if(a.first-a.second==b.first-b.second) return a<b;
+    return a.first-a.second<b.first-b.second;
 }
+bool cmp2(pii a,pii b){
+    return a.second>b.second;
+}
+queue<int> q;
+bool flag1=1,flag2=1;
+signed main(){
+    // freopen("buy5.in","r",stdin);
+ios::sync_with_stdio(0);
+    cin>>n>>m;
+    for(int i=1;i<=n;++i){
+        cin>>a[i].first>>a[i].second;
+        if(a[i].first!=a[i].second) flag1=0;
+    }for(int i=1;i<=m;++i){
+        cin>>b[i].first>>b[i].second;
+        q.push(i);
+    }
+    sort(a+1,a+n+1,cmp);
+    for(int i=1;i<=n;++i){
+        c[i]={a[i].second,0};
+    }
+    sort(b+1,b+m+1,cmp2);
+    // for(int i=1;i<=n;++i)
+    //     dbg(i,a[i].first,a[i].second,"_");
+    // for(int i=1;i<=m;++i){
+    //     dbg(i,b[i].first,b[i].second);
+    // }
+    if(n>=1e5){
+        long long ans=0;
+        {
+            for(int i=1;i<=n;++i)
+                ans+=a[i].first;
+            for(int i=1;i<=min(n,m);++i){
+                ans-=b[i].second;
+            }
+            cout<<ans;
+            return 0;
+        }
+        
+    }
+    while(!q.empty()){
+        int temp=q.front();
+        q.pop();
+        if(temp==0) continue;
+        // dbg(temp);
+        for(int i=1;i<=n;++i){
+            if(b[temp].first<=a[i].first){
+                if(a[i].first-b[temp].second<c[i].first){
+                    dbg(c[i].second);
+                    q.push(c[i].second);
+                    c[i].first=a[i].first-b[temp].second;
+                    c[i].second=temp;
+                    break;
+                }
+            }
+        }
+    }
+    long long ans=0;
+    for(int i=1;i<=n;++i){
+        ans+=c[i].first;
+        // dbg(i,c[i].first,c[i].second,a[i].first,a[i].second);
+    }
+    cout<<ans;
+}
+/*
+
+1 2 0 4 2 
+2 1 3 5 2
+3 3 0 6 3
+4 4 0 6 4
+5 3 4 7 5
+
+*/

@@ -1,6 +1,5 @@
 #include<bits/stdc++.h>
 using namespace std;
- 
 namespace IN {
     #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
@@ -27,7 +26,6 @@ namespace IN {
     }
     #undef getc
 }
- 
 namespace OUT {
     template < typename T > inline void put(T x) {
         static std::streambuf * outbuf = cerr.rdbuf();
@@ -124,15 +122,98 @@ template<typename T>
         if (!debug_switch)
             return;
         cerr << x << "\n";
+    }template<typename T>
+    inline T maxm(T a,T b){
+        return (a>b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First maxm(First first,Rest... rest){
+        return maxm(first,maxm(rest...));
+    }
+    template<typename T>
+    inline T minm(T a,T b){
+        return (a<b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First minm(First first,Rest... rest){
+        return minm(first,minm(rest...));
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
-int main(){
-//ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+const int N=1e6+10;
+int T,T2,p[N],n;
+bitset<N> ansv,color;
+int tim=0;
+// bool ansv[N],color[N];
+void dfs(int cz){
+    // if(clock()-tim>990/T2){
+    //     // tim=clock();
+    //     return ;
+    // }
+    if(cz==(n-1)/2){
+        for(int i=1;i<=n;++i)
+            if(color[i]==0){
+                ansv[p[i]]=1;
+                break;
+            }     
+        return ;
+    }
+    for(int i=2;i<=n-1;++i){
+        // dbg(i,color[i]);
+        if(color[i]) 
+            continue;
+        int lb=-1,rb=-1;
+        for(int j=i-1;j>=1;--j){
+            // dbg(j,color[j]);
+            if(!color[j]){
+                lb=j;break;
+            }
+        }for(int j=i+1;j<=n;++j){
+            if(!color[j]){
+                rb=j;break;
+            }
+        }if(lb==-1||rb==-1) continue;
+        color[i]=color[rb]=1;
+        int temp=p[lb];
+        p[lb]=maxm(p[i],p[lb],p[rb]);
+        dfs(cz+1);
+        p[lb]=minm(p[i],temp,p[rb]);
+        dfs(cz+1);
+        p[lb]=temp;
+        color[i]=color[rb]=0;
     }
 }
+int main(){
+//ios::sync_with_stdio(0);
+    auto_init();
+    cin>>T;
+    T2=T;
+    while(T--){
+        bool flag=1;
+        // tim=clock();
+        cin>>n;
+        for(int i=1;i<=n;++i){
+            cin>>p[i];
+            if(p[i]!=i) flag=0;
+        }
+        if(flag){
+            for(int i=1;i<n;i+=2){
+                cout<<"10";
+            }
+            cout<<"1\n";
+            continue;
+        }
+        ansv.reset();
+        color.reset();
+        // memset(ansv,0,sizeof(ansv));
+        // memset(color,0,sizeof(color));
+        dfs(0);
+        for(int i=1;i<=n;++i){
+            cout<<ansv[i];
+        }cout<<"\n";
+    }
+}
+/*
+1
+5
+1 2 3 4 5
+*/

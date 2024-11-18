@@ -1,6 +1,6 @@
 #include<bits/stdc++.h>
+// #include<bit>
 using namespace std;
- 
 namespace IN {
     #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
@@ -27,7 +27,6 @@ namespace IN {
     }
     #undef getc
 }
- 
 namespace OUT {
     template < typename T > inline void put(T x) {
         static std::streambuf * outbuf = cerr.rdbuf();
@@ -124,15 +123,70 @@ template<typename T>
         if (!debug_switch)
             return;
         cerr << x << "\n";
+    }template<typename T>
+    inline T maxm(T a,T b){
+        return (a>b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First maxm(First first,Rest... rest){
+        return maxm(first,maxm(rest...));
+    }
+    template<typename T>
+    inline T minm(T a,T b){
+        return (a<b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First minm(First first,Rest... rest){
+        return minm(first,minm(rest...));
     }
 }using namespace azcy;
 const int N=1e4+10;
-int c,t,n,m;
-int main(){
-//ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+#define int long long
+unsigned int bc(unsigned int x){
+    unsigned int temp=1;
+    while(temp<x){
+        temp<<=1;
+    }
+    // if(temp==x) temp>>=1;
+    return temp;
+}
+string s;
+unsigned int len,q,op;
+signed main(){
+ios::sync_with_stdio(0);
+// cout<<LONG_LONG_MAX<<"\n";
+    cin>>s;
+    cin>>q;
+    len=s.length();
+    for(int i=1;i<=q;++i){
+        cin>>op;
+        unsigned int temp,cnt=0,x=(op-1)%len;
+        op=ceil((long double)op/len);
+        while(op>1){
+            temp=bc(op);
+            op-=(temp>>1);
+            ++cnt;
+            // cnt%=2;
+        }
+        // op+=cnt;
+        // op=__builtin_popcountll(op);
+        if(cnt%2==1){
+            if(s[x]<='z'&&s[x]>='a'){
+                cout<<(char)(s[x]-'a'+'A')<<' ';
+            }else{
+                cout<<(char)(s[x]-'A'+'a')<<' ';
+            }
+        }
+        else
+            cout<<s[x]<<' ';
     }
 }
+/*
+AnUoHrjhgfLMcDIpzxXmEWPwBZvbKqQuiJTtFSlkNGVReOYCdsay
+5
+1000000000000000000 123456789 1 987654321 999999999999999999
+9223372036854775807
+q q W e t I E Q
+q q W e t I E Q
+
+*/

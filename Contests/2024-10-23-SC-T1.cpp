@@ -126,13 +126,45 @@ template<typename T>
         cerr << x << "\n";
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
+const int N=1e2+10;
+int n,a[N],ans=INT_MIN;
+int pans[N],ptop;
+vector<int> nei[N];
+bitset<N> vis;
+char ch;
+bool dfs(int x,int sum){
+    vis[x]=1;
+    int flag=0;
+    for(int u:nei[x]){
+        if(vis[u]) continue;
+        if(dfs(u,sum+a[u])) pans[++ptop]=x,flag=2;
+        if(flag==0) flag=1;
+    }vis[x]=0;
+    if(flag==0)
+        if(sum>=ans){
+            ptop=0;
+            ans=sum;
+            pans[++ptop]=x;
+            return 1;
+        }
+    if(flag==2) return 1;
+    return 0;
+}
 int main(){
 //ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+    cin>>n;
+    for(int i=1;i<=n;++i)
+        cin>>a[i];
+    for(int i=1;i<=n;++i){
+        for(int j=i+1;j<=n;++j){
+            cin>>ch;
+            if(ch=='1') nei[i].push_back(j);
+        }
     }
+    for(int i=1;i<=n;++i){
+        dfs(i,a[i]);
+    }
+    for(int i=ptop;i>1;--i) cout<<pans[i]<<' ';
+    cout<<pans[1]<<'\n';
+    cout<<ans;
 }

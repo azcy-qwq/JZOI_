@@ -126,13 +126,19 @@ template<typename T>
         cerr << x << "\n";
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
+const int N=1e5+10;
+int n,a[N],prv,cur;
 int main(){
-//ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+    // freopen("duel4.in","r",stdin);
+    ios::sync_with_stdio(0);
+    cin>>n;
+    for(int i=1;i<=n;++i)
+        cin>>a[i];
+    sort(a+1,a+n+1);
+    for(int i=1;i<=n;++i){
+        if(a[i]!=a[i-1]) prv+=cur,cur=0;
+        if(prv>0) --prv;
+        ++cur;
     }
+    cout<<prv+cur;
 }

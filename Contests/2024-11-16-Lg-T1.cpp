@@ -1,6 +1,5 @@
 #include<bits/stdc++.h>
 using namespace std;
- 
 namespace IN {
     #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
@@ -27,7 +26,6 @@ namespace IN {
     }
     #undef getc
 }
- 
 namespace OUT {
     template < typename T > inline void put(T x) {
         static std::streambuf * outbuf = cerr.rdbuf();
@@ -124,15 +122,46 @@ template<typename T>
         if (!debug_switch)
             return;
         cerr << x << "\n";
+    }template<typename T>
+    inline T maxm(T a,T b){
+        return (a>b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First maxm(First first,Rest... rest){
+        return maxm(first,maxm(rest...));
+    }
+    template<typename T>
+    inline T minm(T a,T b){
+        return (a<b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First minm(First first,Rest... rest){
+        return minm(first,minm(rest...));
     }
 }using namespace azcy;
 const int N=1e4+10;
-int c,t,n,m;
+string a,b;
+pair<int,char> pci[N];
+int n;
 int main(){
-//ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+ios::sync_with_stdio(0);
+    cin>>n;
+    for(int i=0;i<26;++i)
+        pci[i].second=i+'a';
+    cin>>a;
+    for(int i=0;i<a.length();++i)
+        pci[a[i]-'a'].first++;
+    sort(pci,pci+26);
+    for(int i=0;i<a.length();++i){
+        bool flag=1;
+        for(int j=0;j<=25;++j){
+            if(pci[j].first==pci[0].first&&pci[j].second==a[i]){
+                cout<<pci[j].second;
+                flag=0;
+                break;
+            }
+                
+        }if(flag)cout<<pci[0].second;
     }
+    return 0;
 }

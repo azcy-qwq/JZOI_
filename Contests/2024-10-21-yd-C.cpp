@@ -1,5 +1,7 @@
-#include<bits/stdc++.h>
+#pragma GCC optimize(2)
+#include <bits/stdc++.h>
 using namespace std;
+
 namespace IN
 {
 #define MAX_INPUT 25000003
@@ -41,7 +43,7 @@ namespace OUT
     template <typename T>
     inline void put(T x)
     {
-        static std::streambuf *outbuf = cout.rdbuf();
+        static std::streambuf *outbuf = cerr.rdbuf();
         static char stack[21];
         static int top = 0;
         if (x < 0)
@@ -69,13 +71,13 @@ namespace OUT
     }
     inline void putc(const char ch)
     {
-        static std::streambuf *outbuf = cout.rdbuf();
+        static std::streambuf *outbuf = cerr.rdbuf();
         outbuf->sputc(ch);
     }
     template <typename T>
     inline void put(const char ch, T x)
     {
-        static std::streambuf *outbuf = cout.rdbuf();
+        static std::streambuf *outbuf = cerr.rdbuf();
         static char stack[21];
         static int top = 0;
         if (x < 0)
@@ -135,12 +137,12 @@ namespace azcy
     template <typename T>
     void dbgo(T x)
     {
-        cout << x << " ";
+        cerr << x << " ";
     }
     template <typename First, typename... Rest>
     void dbgo(First first, Rest... rest)
     {
-        cout << first << " ";
+        cerr << first << " ";
         dbgo(rest...);
     }
     template <typename First, typename... Rest>
@@ -148,110 +150,92 @@ namespace azcy
     {
         if (!debug_switch)
             return;
-        cout << first << " ";
+        cerr << first << " ";
         dbgo(rest...);
-        cout << "\n";
+        cerr << "\n";
     } // made by _azcy
     template <typename T>
     void dbg(T x)
     {
         if (!debug_switch)
             return;
-        cout << x << "\n";
+        cerr << x << "\n";
     }
 }
 using namespace azcy;
-const int N = 3e3 + 10;
-int n, m;
-class POOL_
+const int N = (1 << 18) + 10;
+int n, a[N], q, l, r, x;
+template <typename T>
+class Sparce_Table_Max
 {
 private:
-    char cards[N];
-    int top = 0, cur = 0;
+    T data_[N][__lg(N) + 2];
+    int maxn = 0, Log_n;
 
 public:
-    void insert(char ch)
+    inline void insert(int x)
     {
-        cards[++top] = ch;
+        data_[++maxn][0] = x;
     }
-    char get()
+    inline void build()
     {
-        if (cur < top)
-            ++cur;
-        return cards[cur];
-    }
-} pool;
-template <typename T>
-char out_ident[N];
-class pig_
-{
-protected:
-public:
-	bool equip=0;
-    int hp=4;
-    char identity;
-    // chain_list<char> cards;
-    string cards;
-} pig[N >> 2];
-string s;
-char ch;
-int check(){
-    int f=1;
-    for(int i=1;i<=n;++i){
-        if(pig[i].identity=='m'&&pig[i].hp<=0) return -1;
-        if(pig[i].identity=='f'&&pig[i].hp>0){
-            // return 1;
-            f=0;
+        Log_n = __lg(maxn);
+        for (int j = 1; j <= Log_n; ++j)
+        {
+            for (int i = 1; i + (1 << j) - 1 <= maxn; ++i)
+            {
+                data_[i][j] = max(data_[i][j - 1], data_[i + (1 << (j - 1))][j - 1]);
+            }
         }
     }
-    return f;
-}
-bool alive(int id){
-    return (pig[id].hp>0)?1:0;
-}
+    inline T query(int l, int r)
+    {
+        // if(l>r) swap(l,r);
+        int s = __lg(r - l + 1);
+        return max(data_[l][s], data_[r - (1 << s) + 1][s]);
+    }
+};
+Sparce_Table_Max<int> st[16];
+
 int main()
 {
-    //	ios::sync_with_stdio(0);
-    cin >> n >> m;
-    for (int i = 1; i <= n; ++i)
+    // qfopen("qwq.in","qwq.out");
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cin >> n;
+    if (n > 2000)
     {
-        cin >> s;
-        
-        if (s[0] == 'F')
-            pig[i].identity = 'f';
-        else if (s[0] == 'M')
-            pig[i].identity = 'm';
-        else
-            pig[i].identity = 'z';
-        // dbg(pig[i].identity);
-        for (int j = 1; j <= 4; ++j)
+        for (int i = 1; i <= n; ++i)
         {
-            cin >> ch;
-            ch=ch-'A'+'a';
-            pig[i].cards+=ch;
-            // pig[i].cards.push_back(ch);
+            // cin >> a[i];
+            redi(a[i]);
+            for (int j = 0; j < 16; ++j)
+            {
+                st[j].insert((a[i] | j));
+            }
+        }
+        for (int j = 0; j < 16; ++j)
+            st[j].build();
+        cin >> q;
+        for (int oo = 1; oo <= q; ++oo)
+        {
+            // cin >> l >> r >> x;
+            redi(l,r,x);
+            // cout << st[x].query(l, r)<<"\n";
+            put(st[x].query(l, r));
+        }
+    }else{
+        for(int i=1;i<=n;++i)
+            cin>>a[i];
+        cin>>q;
+        for(int op=1;op<=q;++op){
+            cin>>l>>r>>x;
+            int ans=INT_MIN;
+            for(int i=l;i<=r;++i){
+                ans=max(ans,a[i]|x);
+            }
+            cout<<ans<<"\n";
         }
     }
-    for (int i = 1; i <= m; ++i)
-    {
-        cin >> ch;
-        pool.insert(ch);
-    }
-    // for(int i=1;i<=100;++i)
-    //     cout<<pool.get();
-    int cur;
-    do{
-        ++cur;
-        cur=(cur-1)%n+1;
-        if(!alive(cur)) continue;
-        for(int i=1;i<=2;++i)
-            pig[cur].cards+=pool.get();
-        while(alive(cur)&&check()==0){
-            if(pig[cur].cards.length()==0) break;
-			for(int i=0;i<pig[cur].cards.length();++i){
-				if(check()==0&&alive(cur)) break;
-				
-			}
-        }
-    }while(check()==0);
+//    cerr<<(double)clock()/CLOCKS_PER_SEC;
 }

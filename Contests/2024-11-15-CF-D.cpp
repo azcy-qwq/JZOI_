@@ -1,6 +1,5 @@
 #include<bits/stdc++.h>
 using namespace std;
- 
 namespace IN {
     #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
@@ -27,7 +26,6 @@ namespace IN {
     }
     #undef getc
 }
- 
 namespace OUT {
     template < typename T > inline void put(T x) {
         static std::streambuf * outbuf = cerr.rdbuf();
@@ -124,15 +122,62 @@ template<typename T>
         if (!debug_switch)
             return;
         cerr << x << "\n";
+    }template<typename T>
+    inline T maxm(T a,T b){
+        return (a>b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First maxm(First first,Rest... rest){
+        return maxm(first,maxm(rest...));
+    }
+    template<typename T>
+    inline T minm(T a,T b){
+        return (a<b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First minm(First first,Rest... rest){
+        return minm(first,minm(rest...));
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
+const int N=5e5+10;
+int t,n,a[N];
+int fa[N],maxi[N],mini[N];
+int findfa(int id){
+    if(fa[id]==id) return id;
+    return fa[id]=findfa(fa[id]);
+}
+void merge(int x,int y){
+    // assert(x!=0);
+    // assert(y!=0);
+    int fax=findfa(x),fay=findfa(y);
+    if(fax==fay) return;
+    maxi[fax]=max(maxi[fax],maxi[fay]),mini[fay]=min(mini[fax],mini[fay]);
+    fa[fay]=fa[fax];
+}
 int main(){
 //ios::sync_with_stdio(0);
-
-    cin>>c>>t;
+    cin>>t;
+    iota(fa,fa+n,0);
     while(t--){
-        cin>>n>>m;
+        cin>>n;
+        for(int i=1;i<=n;++i)
+            cin>>a[i],mini[i]=maxi[i]=a[i];
+        for(int i=2;i<=n;++i){
+            int cur=i;
+            while(cur>=2&&mini[findfa(cur)]<maxi[findfa(cur-1)]){
+                // dbg(cur);
+                merge(cur,cur-1);
+                --cur;
+            }
+        }
+        // for(int i=n-1;i>=1;--i){
+        //     int cur=i;
+        //     while(findfa(cur)!=findfa(cur+1)&&cur<=n-1&&maxi[findfa(cur)]){
+        //         ++cur;
+        //     }
+        // }
+        for(int i=1;i<=n;++i)
+            cout<<maxi[findfa(i)]<<" ";
+        cout<<"\n";
     }
 }

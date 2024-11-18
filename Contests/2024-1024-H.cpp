@@ -126,13 +126,64 @@ template<typename T>
         cerr << x << "\n";
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
-int main(){
-//ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+const int N=1e6+10;
+#define int long long
+template<typename T>
+class Sparce_Table_Max{
+	private:
+		T data_[N][__lg(N)+2];
+		int maxn=0,Log_n;
+	public:
+		void insert(int x){
+			data_[++maxn][0]=x;
+		}
+		void build(){
+			Log_n=__lg(maxn);
+			for(int j=1;j<=Log_n;++j){
+				for(int i=1;i+(1<<j)-1<=maxn;++i){
+					data_[i][j]=max(data_[i][j-1],data_[i+(1<<(j-1))][j-1]);
+				}
+			}
+		}
+		inline T query(int l,int r){
+			//if(l>r) swap(l,r);
+			int s=__lg(r-l+1);
+			return max(data_[l][s],data_[r-(1<<s)+1][s]);
+		}
+};
+Sparce_Table_Max<int> dat;
+int n,m,year[N],sum[N],top,l,r,ll,rr,temp;
+map<int,int> to;
+signed main(){
+    // freopen("P2471_1.in","r",stdin);
+    // freopen("awa.out","w",stdout);
+ios::sync_with_stdio(0);
+    cin>>n;
+    for(int i=1;i<=n;++i){
+        cin>>year[i]>>sum[i];
+        dat.insert(sum[i]);
+        to[year[i]]=i;
+    }
+    cin>>m;
+    dat.build();
+    for(int i=1;i<=m;++i){
+        cin>>l>>r;
+        // if(to[r]==0){
+        //     cout<<"maybe\n";
+        //     continue;
+        // } 
+        bool b1=(to[l]!=0),b2=(to[r]!=0);
+        ll=lower_bound(year+1,year+n+1,l+1)-year;
+        rr=lower_bound(year+1,year+n+1,r)-1-year;
+        if(rr<ll) temp=0;
+        else temp=dat.query(ll,rr);
+        if((to[r]!=0&&temp>=sum[to[r]])||(to[l]!=0&&temp>=sum[to[l]])||
+           (to[l]!=0&&to[r]!=0&&(sum[to[l]]<=sum[to[r]]))){
+            cout<<"false\n";
+        }else if((rr-ll+2!=r-l)||(to[r]==0)||(to[l]==0)){
+            cout<<"maybe\n";
+        }else{
+            cout<<"true\n";
+        }
     }
 }

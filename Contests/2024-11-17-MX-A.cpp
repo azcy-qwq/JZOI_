@@ -1,6 +1,5 @@
 #include<bits/stdc++.h>
 using namespace std;
- 
 namespace IN {
     #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
@@ -27,7 +26,6 @@ namespace IN {
     }
     #undef getc
 }
- 
 namespace OUT {
     template < typename T > inline void put(T x) {
         static std::streambuf * outbuf = cerr.rdbuf();
@@ -124,15 +122,76 @@ template<typename T>
         if (!debug_switch)
             return;
         cerr << x << "\n";
+    }template<typename T>
+    inline T maxm(T a,T b){
+        return (a>b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First maxm(First first,Rest... rest){
+        return maxm(first,maxm(rest...));
+    }
+    template<typename T>
+    inline T minm(T a,T b){
+        return (a<b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First minm(First first,Rest... rest){
+        return minm(first,minm(rest...));
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
-int main(){
-//ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+const int N=4e5+10;
+#define int long long
+int m,n;
+struct prt{
+    int id,tim;
+    bool operator<(const prt a)const{
+        return (a.tim!=tim)?(tim>a.tim):id>a.id;
+    }
+}aaa;
+pair<int,int> file[N];
+pair<int,int> paixu[N];
+vector<int> ans[N];
+signed main(){
+    auto_init();
+    cin>>n>>m;
+    for(int i=1;i<=n;++i){
+        cin>>file[i].second>>file[i].first;
+        paixu[i].first=file[i].first,paixu[i].second=i;
+    }
+    priority_queue<prt> pq,ready;
+    sort(file+1,file+n+1);
+    sort(paixu+1,paixu+n+1);
+    for(int i=1;i<=m;++i)
+        ready.push((prt){i,-1});
+    for(int i=1;i<=n;++i){
+        while(!pq.empty()){
+            if(pq.top().tim>file[i].first)
+                break;
+            ready.push((prt){pq.top().id,-1});
+            pq.pop();
+        }if(!ready.empty()){
+            aaa=ready.top();
+            ready.pop();
+            ans[aaa.id].push_back(paixu[i].second);
+            pq.push((prt){aaa.id,file[i].first+file[i].second});
+        }else{
+            aaa=pq.top();
+            pq.pop();
+            aaa.tim+=file[i].second;
+            pq.push(aaa);
+            ans[aaa.id].push_back(paixu[i].second);
+        }
+    }
+    for(int i=1,cur;i<=m;++i){
+        cur=i;
+        cout<<ans[cur].size();
+        if(ans[cur].empty()){
+            cout<<'\n';
+            continue;
+        } 
+        sort(ans[cur].begin(),ans[cur].end());
+        for(auto u:ans[cur])
+            cout<<" "<<u;
+        cout<<"\n";
     }
 }

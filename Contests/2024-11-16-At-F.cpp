@@ -1,6 +1,5 @@
 #include<bits/stdc++.h>
 using namespace std;
- 
 namespace IN {
     #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
@@ -27,7 +26,6 @@ namespace IN {
     }
     #undef getc
 }
- 
 namespace OUT {
     template < typename T > inline void put(T x) {
         static std::streambuf * outbuf = cerr.rdbuf();
@@ -124,15 +122,74 @@ template<typename T>
         if (!debug_switch)
             return;
         cerr << x << "\n";
+    }template<typename T>
+    inline T maxm(T a,T b){
+        return (a>b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First maxm(First first,Rest... rest){
+        return maxm(first,maxm(rest...));
+    }
+    template<typename T>
+    inline T minm(T a,T b){
+        return (a<b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First minm(First first,Rest... rest){
+        return minm(first,minm(rest...));
     }
 }using namespace azcy;
 const int N=1e4+10;
-int c,t,n,m;
+int n,m,l;
+int a[N],b[N],c[N],atop,btop,ctop;//1: a win 2: b win
+bool dfs(int id){
+    if(id==1){
+        for(int i=1;i<=atop;++i){
+            int temp,t2;
+            if(a[i]==-1) continue;
+            temp=a[i];
+            a[i]=-1;
+            c[++ctop]=temp;
+            for(int j=1;j<=ctop;++j){
+                if(c[i]>=temp) continue;
+                a[++atop]=c[i],t2=c[i],c[i]=-1;
+                if(dfs(2)) return 1;
+                --atop;
+                c[i]=t2;
+            }
+            --ctop;
+            a[i]=temp;
+        }
+        return 0;
+    }else{
+        for(int i=1;i<=btop;++i){
+            int temp,t2;
+            if(b[i]==-1) continue;
+            temp=b[i];
+            b[i]=-1;
+            c[++ctop]=temp;
+            for(int j=1;j<=ctop;++j){
+                if(c[i]>=temp) continue;
+                b[++btop]=c[i],t2=c[i],c[i]=-1;
+                if(dfs(2)==2) return 2;
+                --btop;
+                c[i]=t2;
+            }
+            --ctop;
+            b[i]=temp;
+        }return 1;
+    }
+}
 int main(){
 //ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
-    }
+    cin>>n>>m>>l;
+    atop=n,btop=m,ctop=l;
+    for(int i=1;i<=n;++i)
+        cin>>a[i];
+    for(int i=1;i<=m;++i)
+        cin>>b[i];
+    for(int i=1;i<=l;++i)
+        cin>>c[i];
+    if(dfs(1)==1) cout<<"Takahashi";
+    if(dfs(1)==2) cout<<"Aoki";
 }

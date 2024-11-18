@@ -126,13 +126,27 @@ template<typename T>
         cerr << x << "\n";
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
+const int N=5e6+10;
+int n,m,k;
+char ch;
+int temp,ans;
+int r[N],c[N];
 int main(){
-//ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+ios::sync_with_stdio(0);
+    cin>>m>>n>>k;
+    for(int i=1;i<=k;++i){
+        cin>>ch;
+        if(ch=='R'){
+            cin>>temp;
+            r[temp]++;
+        }else{
+            cin>>temp;
+            c[temp]++;
+        }
     }
+    for(int i=1;i<=n;++i)
+        for(int j=1;j<=m;++j){
+            if((r[j]+c[i])%2==1) ++ans;
+        }
+    cout<<ans;
 }

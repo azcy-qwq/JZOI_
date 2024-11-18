@@ -1,6 +1,5 @@
 #include<bits/stdc++.h>
 using namespace std;
- 
 namespace IN {
     #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
@@ -27,7 +26,6 @@ namespace IN {
     }
     #undef getc
 }
- 
 namespace OUT {
     template < typename T > inline void put(T x) {
         static std::streambuf * outbuf = cerr.rdbuf();
@@ -124,15 +122,46 @@ template<typename T>
         if (!debug_switch)
             return;
         cerr << x << "\n";
+    }template<typename T>
+    inline T maxm(T a,T b){
+        return (a>b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First maxm(First first,Rest... rest){
+        return maxm(first,maxm(rest...));
+    }
+    template<typename T>
+    inline T minm(T a,T b){
+        return (a<b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First minm(First first,Rest... rest){
+        return minm(first,minm(rest...));
     }
 }using namespace azcy;
 const int N=1e4+10;
-int c,t,n,m;
+int n,a[N],qzh[N],q,l,r,k,sum[N];
 int main(){
 //ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+    cin>>n>>q;
+    for(int i=1;i<=n;++i){
+        cin>>a[i];
+        qzh[i]=qzh[i-1]+(a[i]==0);
+        sum[i]=sum[i-1]+(a[i]);
+    }
+    for(int i=1;i<=q;++i){
+        cin>>l>>r>>k;
+        if(r-l+1<=k){
+            cout<<"-1\n";
+            continue;
+        }if(r-l==k){
+            if(sum[r]-sum[l-1]==k+1)
+                cout<<"0\n";
+            else
+                cout<<(k-sum[r]+sum[l-1])<<"\n";
+            continue;
+        }
+        //assert(r-l+1!=sum[r]-sum[l-1]);
+        cout<<abs(k-sum[r]+sum[l-1])<<"\n";
     }
 }

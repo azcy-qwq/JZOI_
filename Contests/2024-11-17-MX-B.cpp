@@ -139,8 +139,110 @@ template<typename T>
         return minm(first,minm(rest...));
     }
 }using namespace azcy;
-const int N=1e4+10;
+const int N=1e5+10;
+typedef long double ld;
+typedef long long ll;
+const int n2=28;
+const int n3=18;
+const double inf=1e63;
+bool M1;
+int n,q,p[N],t[N],x[N];
+double qry;
+double p2[100],p3[100],ans;
+double dp[N][n2+1][n3+1];
+bool M2;
+#define See_Memory cerr<<abs(&M1-&M2)/1024.0/1024.0<<"MB\n"
+void init(){
+    p2[0]=1;
+    for(int i=1;i<=58;++i)
+        p2[i]=p2[i-1]*2;
+    p3[0]=1;
+    for(int i=1;i<=38;++i)
+        p3[i]=p3[i-1]*3;
+}
+inline double calc(int id,double speed){
+    return (p[id]-p[id-1])/speed;
+}
+void display(){
+    for(int i=0;i<=n;++i){
+        cerr<<i<<":\n";
+        for(int j=0;j<=n2;++j){
+            for(int k=0;k<=n3;++k){
+                if(dp[i][j][k]<INT_MAX)
+                    dbg("  ",p3[k]*p2[j],dp[i][j][k]);
+            }
+        }
+        cerr<<'\n';
+    }
+}
+bool flag8=1,flag4=0;
 int main(){
-//ios::sync_with_stdio(0);
-    
+// ios::sync_with_stdio(0);
+    auto_init();
+    // See_Memory;
+    // return 0;
+    // qfopen("ship4.in","ship.out");
+    init();
+    cin>>n>>q;
+    // See_Memory;
+    for(int i=1;i<=n;++i){
+        cin>>p[i]>>t[i]>>x[i];
+        // if(x[i]!=1) flag4=0;
+        // if(x[i]==3) flag8=0;
+    }if(flag4){
+        for(int i=1;i<=1;++i){
+            cin>>qry;
+            cout<<qry<<"\n";
+        }
+        return 0;
+    }for(int i=0;i<=n;++i)
+        for(int j=0;j<=n2;++j)
+            for(int k=0;k<=n3;++k)
+                dp[i][j][k]=LONG_LONG_MAX;
+    dp[0][0][0]=0;
+    for(int i=1;i<=n;++i){
+        if(x[i]==2){
+            for(int j=0;j<=n2;++j){
+                for(int k=0;k<=n3;++k){
+                    dp[i][j][k]=minm(dp[i][j][k],dp[i-1][j][k]+calc(i,p2[j]*p3[k]));
+                    if(j>0) dp[i][j][k]=minm(dp[i][j][k],dp[i-1][j-1][k]+calc(i,p2[j-1]*p3[k])+t[i]);
+                }
+            }
+        }else if(x[i]==3){
+            for(int j=0;j<=n2;++j){
+                for(int k=0;k<=n3;++k){
+                    dp[i][j][k]=minm(dp[i][j][k],dp[i-1][j][k]+calc(i,p2[j]*p3[k]));
+                    if(k>0) dp[i][j][k]=minm(dp[i][j][k],dp[i-1][j][k-1]+calc(i,p2[j]*p3[k-1])+t[i]);
+                }
+            }
+        }else if(x[i]==4){
+            for(int j=0;j<=n2;++j){
+                for(int k=0;k<=n3;++k){
+                    dp[i][j][k]=minm(dp[i][j][k],dp[i-1][j][k]+calc(i,p2[j]*p3[k]));
+                    if(j>1) dp[i][j][k]=minm(dp[i][j][k],dp[i-1][j-2][k]+calc(i,p2[j-2]*p3[k])+t[i]);
+                }
+            }
+        }else{
+            for(int j=0;j<=n2;++j){
+                for(int k=0;k<=n3;++k){
+                    dp[i][j][k]=minm(dp[i][j][k],dp[i-1][j][k]+calc(i,p2[j]*p3[k]));
+                    // if(j>1) dp[i][j][k]=minm(dp[i][j][k],dp[i-1][j-2][k]+calc(i,p2[j-2]*p3[k])+t[i]);
+                }
+            }
+        }
+    }
+    // display();
+    for(int i=1;i<=q;++i){
+        cin>>qry;
+        int x=upper_bound(p+1,p+n+1,qry)-p-1;
+        ans=inf;
+        // cout<<x<<'\n';
+        for(int j=0;j<=n2;++j){
+            for(int k=0;k<=n3;++k){
+                ans=minm(ans,dp[x][j][k]+(qry-p[x])/(p2[j]*p3[k]));
+            }
+        }
+        cout<<fixed<<setprecision(12)<<ans<<'\n';
+    }
+    // cerr<<(double)clock()/CLOCKS_PER_SEC;
 }

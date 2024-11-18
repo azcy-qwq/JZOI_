@@ -126,13 +126,46 @@ template<typename T>
         cerr << x << "\n";
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
-int main(){
-//ios::sync_with_stdio(0);
+const int N=1e5+10;
+bool b1;
+int n,op,a,b;
+deque<int> q[N];
+string s;
 
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+int main(){
+ios::sync_with_stdio(0);
+    cin.tie(0);
+    cin>>n;
+    
+    for(int i=1;i<=n;++i){
+        cin>>s;
+        if(s=="push_back"){
+            cin>>a>>b;
+            q[a].push_back(b);
+        }else if(s=="pop_back"){
+            cin>>a;
+            if(q[a].empty()) continue;
+            q[a].pop_back();
+        }else if(s=="push_front"){
+            cin>>a>>b;
+            q[a].push_front(b);
+        }else if(s=="pop_front"){
+            cin>>a;
+            if(q[a].empty()) continue;
+            q[a].pop_front();
+        }else if(s=="size"){
+            cin>>a;
+            cout<<q[a].size()<<"\n";
+        }else if(s=="front"){
+            cin>>a;
+            if(q[a].empty()) continue;
+            cout<<q[a].front()<<"\n";
+        }else{
+            cin>>a;
+            if(q[a].empty()) continue;
+            cout<<q[a].back()<<"\n";
+        }
     }
+    bool b2;
+    // cerr<<(double)(&b2-&b1)/1024/1024;
 }

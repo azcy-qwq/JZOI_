@@ -126,13 +126,41 @@ template<typename T>
         cerr << x << "\n";
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
-int main(){
-//ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+#define int long long
+const int N=1e6+10;
+int n,l,r,a[N],dp[N],ans=INT_MIN;
+bitset<N> bs;
+queue<pair<int,int> > q;
+priority_queue<int> pq1,pq;
+signed main(){
+ios::sync_with_stdio(0);
+    cin>>n>>l>>r;
+    bs[0]=1;
+    
+    for(int i=0;i<=n;++i)
+        cin>>a[i];
+    for(int i=1;i<=l;++i)
+        pq.push(a[i]);
+    for(int i=l;i<=n;++i){
+        pq1.push(dp[i-l]);
+        // if(bs[i]==0) continue;
+        // for(int j=i+l;j<=i+r;++j){
+        //     bs[j]=1;
+        //     dp[j]=max(dp[i]+a[j],dp[j]);
+        // }
+        if(i-r-1>=l) pq.push(dp[i-r-1]);
+        while(!pq.empty()&&pq.top()==pq1.top()){
+            pq.pop(),pq1.pop();
+        }
+        dp[i]=pq1.top()+a[i];
     }
+    for(int i=n-r+1;i<=n;++i)
+        ans=max(ans,dp[i]);
+    // cout<<ans;
+    // for(int i=0;i<=n+r;++i)
+    //     cout<<i<<" "<<dp[i]<<" "<<bs[i]<<"\n";
+    // cout<<endl;
+    // for(int i=n+1;i<=n+r;++i)
+    //     ans=max(ans,dp[i]);
+    cout<<ans;
 }

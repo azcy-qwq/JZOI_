@@ -1,6 +1,5 @@
 #include<bits/stdc++.h>
 using namespace std;
- 
 namespace IN {
     #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
@@ -126,13 +125,64 @@ template<typename T>
         cerr << x << "\n";
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
+const int N=1e6+10;
+#define ll long long
+pair<ll,ll> stone[N];
+pair<int,int> consq[N];
+ll n,m,s,decr[N],qzh[N],cnt[N];
+ll calc(ll x){
+    qzh[0]=cnt[0]=0;
+    for(int i=1;i<=n;++i){
+        qzh[i]=qzh[i-1]+(stone[i].first>=x)*stone[i].second;
+        cnt[i]=cnt[i-1]+(stone[i].first>=x);
+    }
+    ll ans=0;
+    for(int i=1;i<=m;++i){
+        ans+=(cnt[consq[i].second]-cnt[consq[i].first-1])*(qzh[consq[i].second]-qzh[consq[i].first-1]);
+    }
+    return ans;
+}
+typedef pair<int,int> pii;
+pair<pii,pii> piiii;
 int main(){
 //ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+    cin>>n>>m>>s;
+    for(int i=1;i<=n;++i){
+        cin>>stone[i].first>>stone[i].second;
+        decr[i]=stone[i].first;
+    }sort(decr+1,decr+n+1);
+    decr[n+1]=INT_MAX;
+    for(int i=1;i<=m;++i){
+        cin>>consq[i].first>>consq[i].second;
+    }int l=0,r=n+1,ans,mid;
+    ll temp,res;
+    while(r>=l){
+        mid=(l+r)>>1;
+        temp=decr[mid];
+        res=calc(temp);
+        if(res>s) l=mid+1,ans=mid;
+        else if(res<s) r=mid-1,ans=mid;
+        else {
+            cout<<"0";
+            return 0;
+        }
     }
+    // for(int i=0;i<=n+1;++i)
+    //     cout<<i<<" "<<decr[i]<<" "<<calc(decr[i])<<" "<<calc(decr[i])-s<<"\n";
+    // cout<<"\n";
+    // dbg(calc()-s);
+    res=min(min(abs(calc(decr[ans-1])-s),abs(calc(decr[ans])-s))
+        ,abs(calc(decr[ans+1])-s));
+    cout<<res;
 }
+/*
+5 2 15
+1 1
+2 2
+3 3
+4 4
+5 5
+
+1 5
+2 4
+*/

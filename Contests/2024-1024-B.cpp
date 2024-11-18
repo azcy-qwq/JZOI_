@@ -126,13 +126,43 @@ template<typename T>
         cerr << x << "\n";
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
-int main(){
-//ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
-    }
+const int N=1e6+10;
+int f[N],top,cur;
+string s,fa,son,name[N];
+char sgn;
+map<string,int> m; 
+int query(int id){
+    if(f[id]==0) return id;
+    else return query(f[id]);
 }
+int main(){
+    // for(int i=1;i<=N-10;++i)
+    //     f[i]=i;
+ios::sync_with_stdio(0);
+    s="###";
+    while(s.length()!=0){
+        cin>>s;
+        sgn=s[0];
+        s.erase(0,1);
+        // dbg(s);
+        if(m[s]==0) m[s]=++top,name[top]=s;
+        cur=m[s];
+        if(sgn=='#') fa=s;
+        else if(sgn=='+'){
+            f[cur]=m[fa];
+        }else if(sgn=='?'){
+            // cout<<query(cur)<<'\n';
+            cout<<s<<" "<<name[query(cur)]<<"\n";
+        }
+    }
+    // for(int i=1;i<=top;++i)
+    //     cout<<i<<" "<<name[i]<<"\n";
+}
+/*
+1 George
+2 Rodney
+3 Arthur
+4 Gareth
+5 Walter
+6 Edward
+*/

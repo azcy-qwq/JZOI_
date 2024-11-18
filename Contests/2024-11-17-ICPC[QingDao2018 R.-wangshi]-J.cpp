@@ -1,6 +1,5 @@
 #include<bits/stdc++.h>
 using namespace std;
- 
 namespace IN {
     #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
@@ -27,7 +26,6 @@ namespace IN {
     }
     #undef getc
 }
- 
 namespace OUT {
     template < typename T > inline void put(T x) {
         static std::streambuf * outbuf = cerr.rdbuf();
@@ -124,15 +122,76 @@ template<typename T>
         if (!debug_switch)
             return;
         cerr << x << "\n";
+    }template<typename T>
+    inline T maxm(T a,T b){
+        return (a>b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First maxm(First first,Rest... rest){
+        return maxm(first,maxm(rest...));
+    }
+    template<typename T>
+    inline T minm(T a,T b){
+        return (a<b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First minm(First first,Rest... rest){
+        return minm(first,minm(rest...));
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
+const int N=2e5+10;
+typedef long long ll;
+ll t,n,m,a[N];
+// int check(ll x){
+//     int cnt=0;
+//     for(int i=1;i<=n;++i){
+//         if(a[i]<=x) x-=a[i],++cnt;
+//     }return cnt;
+// }
 int main(){
 //ios::sync_with_stdio(0);
-
-    cin>>c>>t;
+    auto_init();
+    cin>>t;
     while(t--){
         cin>>n>>m;
+        for(int i=1;i<=n;++i)
+            cin>>a[i];
+        int cnt=0;
+        ll ans=0;
+        for(int i=1;i<=n;++i){
+            if(a[i]==0) ++cnt,a[i]=LONG_LONG_MAX;
+        }if(n==m){
+            cout<<"Richman\n";
+            continue;
+        }if(m<0||n<m||cnt>m){
+            cout<<"Impossible\n";
+            continue;
+        }
+        for(int i=1;i<=n;++i){
+            if(a[i]==LONG_LONG_MAX) continue;
+            if(cnt<m) ans+=a[i],++cnt,a[i]=LONG_LONG_MAX;
+            else break;
+        }sort(a+1,a+n+1);
+        ans+=a[1];
+        cout<<ans-1<<"\n";
+        // ll l=-1,r=1.5e15,mid,ans;
+        // while(r>=l){
+        //     // mid=l+(r-l)>>1;
+        //     mid=(l+r)>>1;
+        //     // dbg(l,r,mid,ans);
+        //     if(check(mid)>m) r=mid-1,ans=mid-1;
+        //     else l=mid+1,ans=mid;
+        // }if(ans>1.4e15){
+        //     cout<<"Richman\n";
+        //     continue;
+        // } while(check(ans+1)==m) ++ans;
+        // if(check(ans)==m) cout<<ans<<'\n';
+        // else cout<<"Impossible\n";
     }
-}
+}/*
+2
+2 1
+1 7
+5 3
+7 0 1 9 0
+*/

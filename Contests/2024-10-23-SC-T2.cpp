@@ -126,13 +126,66 @@ template<typename T>
         cerr << x << "\n";
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
-int main(){
-//ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+const int N=1e2+10;
+struct rect{
+    int lx=INT_MAX,rx=INT_MIN,ly=INT_MAX,ry=INT_MIN;
+    bool used=0;
+    void update(int x,int y){
+        used=1;
+        lx=min(x,lx);
+        ly=min(y,ly);
+        rx=max(x,rx);
+        ry=max(y,ry);
     }
+}a[N];
+int n,k,ans=INT_MAX;
+pair<int,int> pt[N];
+inline int calc(){
+    int temp=0;
+    for(int i=1;i<=k;++i){
+        if(a[i].used==0) continue;
+        temp+=(a[i].rx-a[i].lx)*(a[i].ry-a[i].ly);
+    }
+    return temp;
+}
+inline bool cd(int x1,int x2,int y1,int y2){
+    return (!(x2>y1||x1>y2));
+}
+bool check(){
+    for(int i=1;i<=k;++i){
+        for(int j=i+1;j<=k;++j){
+            if(cd(a[i].lx,a[j].lx,a[i].rx,a[j].rx)&&cd(a[i].ly,a[j].ly,a[i].ry,a[j].ry))
+                return 1;
+        }
+    }
+    return 0;
+}
+void dfs(int id){
+    if(clock()>(double)CLOCKS_PER_SEC*0.95) return;
+    if(check()||calc()>=ans) return;
+    if(id>n){
+        ans=min(ans,calc());
+        return ;
+    }
+    rect b;
+    for(int i=1;i<=k;++i){
+        b=a[i];
+        a[i].update(pt[id].first,pt[id].second);
+        // dbg(id,i,ans,"1:",a[1].lx,a[1].rx,a[1].ly,a[1].ry,"2:",a[2].lx,a[2].rx,a[2].ly,a[2].ry);
+        if(check()){
+            a[i]=b;
+            continue;
+        } 
+        dfs(id+1);
+        a[i]=b;
+    }
+}
+int main(){
+ios::sync_with_stdio(0);
+    cin>>n>>k;
+    for(int i=1;i<=n;++i)
+        cin>>pt[i].first>>pt[i].second;
+    sort(pt+1,pt+n+1);
+    dfs(1);
+    cout<<ans;
 }

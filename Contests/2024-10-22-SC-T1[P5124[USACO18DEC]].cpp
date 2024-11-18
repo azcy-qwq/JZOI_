@@ -127,12 +127,31 @@ template<typename T>
     }
 }using namespace azcy;
 const int N=1e4+10;
-int c,t,n,m;
+int n,k,a[N],dp[N];
 int main(){
-//ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+ios::sync_with_stdio(0);
+    cin>>n>>k;
+    for(int i=1;i<=n;++i)
+        cin>>a[i];
+        // redi(a[i]);
+    memset(dp,-0x7f,sizeof(dp));
+    int l,r;
+    dp[0]=0;
+    for(int i=1;i<=n;++i){
+        l=i,r=i;
+        for(int j=i-1;j>=max(1,i-k+1);--j){
+            if(a[j]>=a[i]) break;
+            l=j;
+        }for(int j=i+1;j<=min(n,i+k-1);++j){
+            if(a[j]>=a[i]) break;
+            r=j;
+        }
+        for(int l1=l;l1<=i;++l1){
+            for(int r1=i;r1<=r;++r1){
+                if(r1-l1+1>k) break;
+                dp[r1]=max(dp[r1],dp[l1-1]+(r1-l1+1)*a[i]);
+            }
+        }
     }
+    cout<<dp[n];
 }

@@ -127,12 +127,24 @@ template<typename T>
     }
 }using namespace azcy;
 const int N=1e4+10;
-int c,t,n,m;
+int n;
+const long long MAX=(1<<20)-1;
 int main(){
 //ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+    // freopen("qwq.in","w",stdout);
+    cin>>n;
+    // srand(time(0));
+    mt19937_64 rnd(time(0));
+    cout<<n<<"\n";
+    for(int i=1;i<=n;++i)
+        cout<<rnd()%MAX<<" ";
+    cout<<"\n";
+    int q=(1<<18)-1;
+    // int q=20;
+    cout<<q<<"\n";
+    for(int i=1;i<=q;++i){
+        int l=rnd()%(n-1)+1,r=rnd()%(n-l);
+        cout<<l<<" "<<l+r<<" "<<rnd()%16<<"\n";
     }
+    
 }

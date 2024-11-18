@@ -1,6 +1,8 @@
 #include<bits/stdc++.h>
+#include<ext/pb_ds/assoc_container.hpp>
+#include<ext/pb_ds/tree_policy.hpp>
+#include<ext/pb_ds/tag_and_trait.hpp>
 using namespace std;
- 
 namespace IN {
     #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
@@ -27,7 +29,6 @@ namespace IN {
     }
     #undef getc
 }
- 
 namespace OUT {
     template < typename T > inline void put(T x) {
         static std::streambuf * outbuf = cerr.rdbuf();
@@ -124,15 +125,40 @@ template<typename T>
         if (!debug_switch)
             return;
         cerr << x << "\n";
+    }template<typename T>
+    inline T maxm(T a,T b){
+        return (a>b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First maxm(First first,Rest... rest){
+        return maxm(first,maxm(rest...));
+    }
+    template<typename T>
+    inline T minm(T a,T b){
+        return (a<b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First minm(First first,Rest... rest){
+        return minm(first,minm(rest...));
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
+const int N=1e6+10;
+int x,cnt[N];
+namespace quickrand{
+    // mt19937 rnd(time(0));
+    // long long a=791,b=355,c;
+    inline int getrand(){
+        static long long a;
+        a=a*1145141+713;
+        a*=1145141;
+        return a%(1<<28);
+    }
+}
+int n=1e4;
 int main(){
 //ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
-    }
+    vector<int>v(n),o(n);
+    for(int&x:v)cin>>x;
+    iota(o.begin(),o.end(),0);
+    sort(o.begin(),o.end(),[=](int x,int y){return v[x]<v[y];});
 }

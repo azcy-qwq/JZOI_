@@ -1,6 +1,5 @@
 #include<bits/stdc++.h>
 using namespace std;
- 
 namespace IN {
     #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
@@ -27,7 +26,6 @@ namespace IN {
     }
     #undef getc
 }
- 
 namespace OUT {
     template < typename T > inline void put(T x) {
         static std::streambuf * outbuf = cerr.rdbuf();
@@ -124,15 +122,69 @@ template<typename T>
         if (!debug_switch)
             return;
         cerr << x << "\n";
+    }template<typename T>
+    inline T maxm(T a,T b){
+        return (a>b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First maxm(First first,Rest... rest){
+        return maxm(first,maxm(rest...));
+    }
+    template<typename T>
+    inline T minm(T a,T b){
+        return (a<b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First minm(First first,Rest... rest){
+        return minm(first,minm(rest...));
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
+const int N=2.55e3+10;
+bitset<N> bs[N];
+int n,m,ans;
+char ch;
+int qzh[N][N],dp0[N][N],dp1[N][N];
+bool legal(int x,int y){
+    if(x>=1&&x<=n&&y>=1&&y<=m) return true;
+    return false;
+}void input(){
+    cin>>n>>m;
+    for(int i=1;i<=n;++i)
+        for(int j=1;j<=m;++j){
+            cin>>ch;
+            bs[i][j]=(ch=='1');
+        }
+}void qzh_init(){
+    for(int i=1;i<=n;++i)
+        for(int j=1;j<=m;++j){
+            qzh[i][j]=qzh[i-1][j]+qzh[i][j-1]-qzh[i-1][j-1];
+        }
+}
 int main(){
-//ios::sync_with_stdio(0);
-
-    cin>>c>>t;
-    while(t--){
-        cin>>n>>m;
+ios::sync_with_stdio(0);
+    auto_init();
+    input();
+    // qzh_init();
+    // int temp;
+    for(int i=1;i<=n;++i){
+        for(int j=1;j<=m;++j){
+            if(bs[i][j]){
+                dp1[i][j]=dp1[i-1][j-1]+1;
+                for(int k=1;k<=dp1[i-1][j-1];++k){
+                    if(bs[i-k][j]||bs[i][j-k]){
+                        dp1[i][j]=k;
+                        break;
+                    }
+                }ans=max(ans,dp1[i][j]);
+                dp0[i][j]=dp0[i-1][j+1]+1;
+                for(int k=1;k<=dp0[i-1][j+1];++k){
+                    if(bs[i-k][j]||bs[i][j+k]){
+                        dp0[i][j]=k;
+                        break;
+                    }
+                }ans=max(ans,dp0[i][j]);
+            }
+        }
     }
+    cout<<ans;
 }
