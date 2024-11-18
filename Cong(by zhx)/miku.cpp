@@ -1,6 +1,9 @@
 #include<bits/stdc++.h>
 using namespace std;
+<<<<<<< HEAD
 #pragma GCC optimize(3,"Ofast","inline")
+=======
+>>>>>>> 5751b037be5fb24b353c0da7714075341131d7c4
 namespace IN {
     #define MAX_INPUT 25000003
     #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
@@ -125,6 +128,7 @@ template<typename T>
         cerr << x << "\n";
     }
 }using namespace azcy;
+<<<<<<< HEAD
 const int N=3e3+10;
 int n,m;
 int w[N][N],a[N],b[N],prvans,anss;
@@ -222,6 +226,8 @@ int main(){
     }
     output();
 }
+=======
+>>>>>>> 5751b037be5fb24b353c0da7714075341131d7c4
 /*
 大葱是我国自古以来的美食，像我国传统美食北京烤鸭，用鸭子点缀出大葱的香味，令人赞不绝口。民间也流传着有「每天一棵葱，不当单身狗」的说法。
 然而，大葱要发挥出独属于自己的神力，也是有条件的。
@@ -232,4 +238,34 @@ int main(){
 接下来一行N个整数，代表每棵大葱的体积。
 接下来一行M个整数，代表每个抽屉的容积。
 接下来N行每行 M个整数，第i行第 j个数代表第i棵大葱放到第j个抽屉中会产生的神力。
+<<<<<<< HEAD
 */
+=======
+*/
+const int N=1e3+10;
+int n,m;
+int w[N][N],a[N],b[N],w1[N],p[N],prvp[N];
+mt19937 rnd(time(0)+rand());
+void display(){
+    
+}
+int main(){
+    srand(time(0));
+    ios::sync_with_stdio(0);
+    cin>>n>>m;
+    for(int i=1;i<=n;++i)
+        cin>>a[i];
+    for(int i=1;i<=m;++i)
+        cin>>b[i];
+    for(int i=1;i<=n;++i)
+        for(int j=1;j<=m;++j)
+            cin>>w[i][j];
+    long long tim=clock();
+    while(1){
+        if(clock()-tim>CLOCKS_PER_SEC*5)
+            tim=clock(),display();
+        for(int i=1;i<=n;++i){
+        }
+    }
+}
+>>>>>>> 5751b037be5fb24b353c0da7714075341131d7c4

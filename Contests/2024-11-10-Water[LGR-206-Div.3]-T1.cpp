@@ -140,9 +140,15 @@ template<typename T>
     }
 }using namespace azcy;
 const int N=1e4+10;
+<<<<<<< HEAD
 int x,y,p,q;
 int main(){
 //ios::sync_with_stdio(0);
     cin>>x>>y>>p>>q;
     cout<<minm(abs(x-p),abs(p),abs(y-q),abs(q));
+=======
+int main(){
+//ios::sync_with_stdio(0);
+    
+>>>>>>> 5751b037be5fb24b353c0da7714075341131d7c4
 }
