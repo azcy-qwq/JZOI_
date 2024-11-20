@@ -1,0 +1,16 @@
+for(int i=1;i<=n;++i){
+        if(p[i]==0||vis[i]||p[i]==i) continue;
+        int cnt=0,cur=p[i];
+        while(p[cur]){
+            if(!p[cur]||vis[p[cur]]) break;
+            ++cnt;
+            cur=p[cur],vis[cur]=1;
+        }
+        if(p[cur]&&(cnt&1)){
+            cout<<"0";
+            return 0;
+        }if(!p[cur])
+            p[cur]=i;
+    }
+    int cnt=0;
+    for(int i=1;i<=n;++i) cnt+=(p[i]==0);

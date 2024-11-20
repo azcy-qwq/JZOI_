@@ -122,117 +122,67 @@ template<typename T>
         if (!debug_switch)
             return;
         cerr << x << "\n";
+    }template<typename T>
+    inline T maxm(T a,T b){
+        return (a>b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First maxm(First first,Rest... rest){
+        return maxm(first,maxm(rest...));
+    }
+    template<typename T>
+    inline T minm(T a,T b){
+        return (a<b)?a:b;
+    }
+    template<typename First,typename... Rest>
+    inline First minm(First first,Rest... rest){
+        return minm(first,minm(rest...));
     }
 }using namespace azcy;
-const int N=8e5+10;
-#define ll long long
-ll tree[N],lazy[N],a[N];
-void build_tree(int id,int l,int r){
-	if(l==r)
-	{
-		tree[id]=a[l];
-		return ;
-	}
-	int mid=(l+r)>>1;
-	build_tree(id<<1,l,mid);
-	build_tree(id<<1|1,mid+1,r);
-	tree[id]=tree[id<<1]+tree[id<<1|1]; 
-} 
-inline void push_down(int id,int l,int r){
-	if(lazy[id])
-	{
-		int mid=(l+r)>>1;
-		lazy[id<<1]+=lazy[id];
-		lazy[id<<1|1]+=lazy[id];
-		tree[id<<1]+=lazy[id]*(mid-l+1);
-		tree[id<<1|1]+=lazy[id]*(r-mid);
-		lazy[id]=0;
-	}
+const int N=1e4+10;
+mt19937 rnd(time(0));
+int n,a[N],b[N],p[N],prvp[N],ans=INT_MAX,prv,cur,ansp[N];
+uniform_real_distribution<> rd(0,1);
+inline int xrd(){
+    return rnd()%n+1;
+}inline int calc(){
+    int at=0,bt=0;
+    for(int i=1;i<=n;++i){
+        at+=a[p[i]];
+        bt=maxm(at,bt);
+        bt+=b[p[i]];
+    }return maxm(at,bt);
 }
-inline void push_up(int id)
-{
-	tree[id]=tree[id<<1]+tree[id<<1|1];
-}
-void update(int id,int l,int r,int x,int y,ll v){
-	if(l>=x&&r<=y)
-	{
-		lazy[id]+=v;
-		tree[id]+=v*(r-l+1);
-		return;
-	}
-	push_down(id,l,r);
-	int mid=(l+r)>>1;
-	if(x<=mid) update(id<<1,l,mid,x,y,v);
-	if(y>mid) update(id<<1|1,mid+1,r,x,y,v);
-	push_up(id);
-}
-ll find(int id,int l,int r,int x,int y)
-{
-	if(x<=l&&r<=y) return tree[id];
-	push_down(id,l,r);
-	int mid=(l+r)>>1;
-	ll ans=0;
-	if(x<=mid) ans=ans+find(id<<1,l,mid,x,y);
-	if(y>mid) ans=ans+find(id<<1|1,mid+1,r,x,y);
-	return ans; 
-}
-int n,q,l,r;
-ll d,w,qzh[N],rnd,sum,xs;
-inline ll calc(int x){
-    if(x<=0) return 0;
-    // if(x<l) return qzh[x]*xs;
-    // if(x>r) return xs*(qzh[x]+(r-l+1)*d); 
-    // return xs*(qzh[x]+(x-l+1)*d);
-    return find(1,1,n,1,x)*xs;
-}
-constexpr long double LG2=0.69314718055994530942869047418498;
-ll bs(int id,int l,int r,ll v){
-    if(l==r) return l;
-    push_down(id,l,r);
-    ll mid=(l+r)>>1;
-    if(tree[id<<1]*xs>=v) return bs(id<<1,l,mid,v);
-    else return bs(id<<1|1,mid+1,r,v-tree[id<<1]*xs);
+void sa(){
+    double t=0.9;
+    prv=INT_MAX;
+    while(t>0.001){
+        for(int i=1;i<=n;++i)
+            if(rd(rnd)<t) swap(p[xrd()],p[xrd()]);
+        cur=calc();
+        if(cur<prv) memcpy(prvp,p,4*(n+2)),prv=cur;
+        t*=0.999;
+    }
 }
 int main(){
-//   	qfopen("wxyt4.in","wxyt4.out");
-//    cerr<<fixed<<setprecision(32)<<LG2;
-	// freopen("wxyt3.in","r",stdin);
-	// freopen("wxyt3.out","w",stdout);
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    redi(n,q,w);
-    for(int i=1;i<=n;++i){
-        redi(a[i]);
-    }
-    sum=0;
+//ios::sync_with_stdio(0);
+    cin>>n;
     for(int i=1;i<=n;++i)
-        qzh[i]=qzh[i-1]+a[i],sum+=a[i];
-    build_tree(1,1,n);
-    for(int i=1;i<=q;++i){
-        redi(l,r,d);
-        update(1,1,n,l,r,d);//Modify the data according to the statement.
-        sum=find(1,1,n,1,n);
-        rnd=floor(log((long double)w/(long double)sum+1)/LG2);
-        //dbg((long double)w/(long double)sum,log((long double)w/(long double)sum+1)/log(2),__lg((int)((long double)w/(long double)sum+1.0)));
-        int L=0,R=n,mid;
-        xs=(((ll)1)<<rnd);
-        ll temp,last=w-(xs-1)*sum,ans=INT_MAX;
-        // while(R>=L){
-        //     mid=L+((R-L)>>1);
-        //     temp=calc(mid);
-        //     if(temp>last) R=mid-1,ans=mid;
-        //     else if(temp<last) L=mid+1,ans=mid+1;
-        //     else{
-        //         ans=mid;
-        //         break;
-        //     }
-        // }
-        // if(calc(ans-1)>=last) ans--;
-//        put(ans+rnd*n-1);
-        if(last==0)cout<<rnd*n-1<<"\n";
-        else cout<<(long long)(bs(1,1,n,last)+rnd*n-1)<<'\n';
-//		cout<<ans%2<<"\n";
-        sum-=(r-l+1)*d;
-        // update(1,1,n,l,r,-1*d);//Unmodifization
+        cin>>a[i];
+    for(int i=1;i<=n;++i)
+        cin>>b[i];
+    for(int i=1;i<=n;++i)
+        p[i]=i;
+    // ans=INT_MAX;
+    while(clock()<CLOCKS_PER_SEC*0.9){
+        sa();
+        if(prv<ans){
+            ans=prv;
+            memcpy(ansp,prvp,4*(n+2));
+        }
     }
+    cout<<ans<<'\n';
+    for(int i=1;i<=n;++i)
+        cout<<ansp[i]<<' ';
+        
 }
