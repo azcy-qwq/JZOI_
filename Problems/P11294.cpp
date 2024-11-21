@@ -140,7 +140,31 @@ template<typename T>
     }
 }using namespace azcy;
 const int N=1e4+10;
+int n,u,v;
+vector<int> nei[N];
+bitset<N> vis[N];
+pair<int,int> e[N];
+struct P11294
+{
+    /* data */
+    int d[2]={INT_MIN,INT_MIN};
+    void insert(int x){
+        if(x>d[0]) d[1]=d[0],d[0]=x;
+        else if(x>d[1]) d[1]=x;
+    }
+}dp[N];
+int dfs(int id,int fa){
+    if(nei[id].size()==1&&nei[id][0]==fa){
+        dp[id].insert(0);
+        return;
+    }
+}
 int main(){
 //ios::sync_with_stdio(0);
-    
+    cin>>n;
+    for(int i=1;i<=n-1;++i){
+        cin>>e[i].first>>e[i].second;
+        nei[e[i].first].push_back(e[i].second);
+        nei[e[i].second].push_back(e[i].first);
+    }dfs(1,0);
 }

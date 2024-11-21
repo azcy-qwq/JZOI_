@@ -116,7 +116,7 @@ namespace azcy{
         dbgo(rest...);
         cerr<<"\n";
     }//made by _azcy
-template<typename T>
+    template<typename T>
     void dbg(T x)
     {
         if (!debug_switch)
@@ -139,8 +139,42 @@ template<typename T>
         return minm(first,minm(rest...));
     }
 }using namespace azcy;
-const int N=1e4+10;
+const int N=1e3+10;
+typedef long long ll;
+ll a[N][N],qzh[4][N][N],ans=LONG_LONG_MIN;
+int n,m;
+void init(){
+    for(int i=1;i<=n;++i)
+        for(int j=1;j<=m;++j){
+            qzh[0][i][j]=a[i][j]+maxm(0ll,qzh[0][i][j-1]);
+        }
+    for(int i=1;i<=n;++i)
+        for(int j=m;j>=1;--j){
+            qzh[1][i][j]=a[i][j]+maxm(0ll,qzh[1][i][j+1]);
+        }
+    for(int i=1;i<=n;++i)
+        for(int j=1;j<=m;++j){
+            qzh[2][i][j]=a[i][j]+maxm(0ll,qzh[2][i-1][j]);
+        }
+    for(int i=n;i>=1;--i)
+        for(int j=1;j<=m;++j){
+            qzh[3][i][j]=a[i][j]+maxm(0ll,qzh[3][i+1][j]);
+        }
+}
 int main(){
-//ios::sync_with_stdio(0);
-    
+// ios::sync_with_stdio(0);
+
+    auto_init();
+    cin>>n>>m;
+    for(int i=1;i<=n;++i)
+        for(int j=1;j<=m;++j)
+            cin>>a[i][j];
+    init();
+    for(int i=1;i<=n;++i)
+        for(int j=1;j<=m;++j)
+            ans=maxm(ans,qzh[0][i][j]+qzh[2][i][j]-a[i][j]
+            ,qzh[1][i][j]+qzh[2][i][j]-a[i][j]
+            ,qzh[0][i][j]+qzh[3][i][j]-a[i][j]
+            ,qzh[1][i][j]+qzh[3][i][j]-a[i][j]);
+    cout<<ans;
 }

@@ -139,7 +139,8 @@ template<typename T>
         return minm(first,minm(rest...));
     }
 }using namespace azcy;
-const int N=1e4+10;
+const int N=1e3+10;
+int n,m,a[N],dp;
 int main(){
 //ios::sync_with_stdio(0);
     

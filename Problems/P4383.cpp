@@ -139,8 +139,65 @@ template<typename T>
         return minm(first,minm(rest...));
     }
 }using namespace azcy;
-const int N=1e4+10;
-int main(){
-//ios::sync_with_stdio(0);
-    
+const int N=3e5+10;
+typedef long long ll;
+typedef pair<int,ll> PII;
+vector<PII> g[N];
+int n,k; 
+ll val,sum,cnt;
+struct node
+{
+	int c; ll v;
+    bool operator<(const node &x)const{
+        return v<x.v||(v==x.v&&c<x.c);
+    }
+    node operator+(const node &x){
+        node y;
+        y.c=c+x.c,y.v=v+x.v;
+        return y;
+    }
+}dp[N][3],tmp[3];
+void dfs(int u,int fa)
+{
+	for(PII h:g[u])
+	{
+		int v=h.first; ll w=h.second;
+		if(v==fa) continue; 
+        dfs(v,u);
+		dp[u][2]=max(dp[u][2]+dp[v][0],dp[u][1]+dp[v][1]+(node){1,w-val});
+		dp[u][1]=max(dp[u][0]+dp[v][1]+(node){0,w},dp[u][1]+dp[v][0]);
+		dp[u][0]=dp[u][0]+dp[v][0];
+	}
+	dp[u][0]=max(dp[u][0],max(dp[u][1]+(node){1,-val},dp[u][2]));
+}
+void check(ll x)
+{
+	val=x;
+	for(int i=1;i<=n;++i)	
+		dp[i][0]={0,0},dp[i][1]={0,0},dp[i][2]={1,-val};
+	dfs(1,0);
+	sum=dp[1][0].v,cnt=dp[1][0].c;
+}
+int main()
+{
+	auto_init();
+	cin>>n>>k; k++;
+	ll ans=0,l=0,r=0;
+	for(int i=2;i<=n;++i)
+	{
+		int u,v,w; cin>>u>>v>>w;
+		g[u].push_back({v,w});
+		g[v].push_back({u,w});
+		r+=(w>0?w:-w);
+	}
+	l=-r; 
+	while(l<=r)
+	{
+		ll mid=(l+r)>>1;
+		check(mid);
+		if(cnt>=k) l=mid+1,ans=mid;
+		else r=mid-1;
+	}
+	check(ans);
+	cout<<sum+ans*k<<'\n';
 }
