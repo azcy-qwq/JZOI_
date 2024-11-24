@@ -146,136 +146,19 @@ namespace azcy{
         return minm(first,minm(rest...));
     }
 }using namespace azcy;
-const int N=1e6+10;
-struct Node{
-	double tree;
-	double lazy;
-}sgt[N];
-namespace sgtt
-{
-    #define lc(x) x<<1
-    #define rc(x) x<<1|1
-    void push_up(int id){
-    	sgt[id].tree=minm(sgt[lc(id)].tree,sgt[rc(id)].tree);
-    }
-    void push_down(int id){
-    	if(sgt[id].lazy!=0){
-            sgt[lc(id)].tree+=sqrt(sgt[lc(id)].tree)*2*sgt[id].lazy+sgt[id].lazy*sgt[id].lazy;
-            sgt[rc(id)].tree+=sqrt(sgt[rc(id)].tree)*2*sgt[id].lazy+sgt[id].lazy*sgt[id].lazy;
-            sgt[lc(id)].lazy+=sgt[id].lazy;
-            sgt[rc(id)].lazy+=sgt[id].lazy;
-    		// sgt[lc(id)].tree2+=2*sgt[id].lazy*sgt[lc(id)].tree1
-    		// 	+sgt[id].lazy*sgt[id].lazy*(x-x/2);
-    		// sgt[lc(id)].tree1+=(x-x/2)*sgt[id].lazy;
-    		// sgt[lc(id)].lazy+=sgt[id].lazy;
-    
-    		// sgt[rc(id)].tree2+=2*sgt[id].lazy*sgt[rc(id)].tree1
-    		// 	+sgt[id].lazy*sgt[id].lazy*(x/2);
-    		// sgt[rc(id)].tree1+=(x/2)*sgt[id].lazy;
-    		// sgt[rc(id)].lazy+=sgt[id].lazy;
-    		sgt[id].lazy=0;
-    	}
-    }
-
-    double query(int id,int l,int r,int x,int y){
-        if(l>=x&&r<=y)
-            return sgt[id].tree;
-        else{
-            push_down(id);
-            int mid=(l+r)>>1;
-            double temp=LONG_LONG_MAX;
-            if(mid>=x) temp=minm(temp,query(id<<1,l,mid,x,y));
-            if(mid<y) temp=minm(temp,query(id<<1|1,mid+1,r,x,y));
-            return temp;
-        }
-    }
-    // double query1(int id,int l,int r,int x,int y){
-    // 	if(l>=x&&r<=y)
-    // 		return sgt[id].tree1;
-    // 	else{
-    // 		push_down(id,r-l+1);
-    // 		int mid=(l+r)>>1;
-    // 		double temp=0;
-    // 		if(mid>=x) temp+=query1(id<<1,l,mid,x,y);
-    // 		if(mid<y) temp+=query1(id<<1|1,mid+1,r,x,y);
-    // 		return temp;
-    // 	} 
-    // }
-    // double query2(int id,int l,int r,int x,int y){
-    // 	if(l>=x&&r<=y)
-    // 		return sgt[id].tree2;
-    // 	else{
-    // 		push_down(id,r-l+1);
-    // 		int mid=(l+r)>>1;
-    // 		double temp=0;
-    // 		if(mid>=x) temp+=query2(id<<1,l,mid,x,y);
-    // 		if(mid<y) temp+=query2(id<<1|1,mid+1,r,x,y);
-    // 		return temp;
-    // 	}
-    // }
-    void update(int id,int l,int r,int x,int y,double v){
-    	if(l>=x&&r<=y)
-    		sgt[id].lazy+=v,sgt[id].tree+=2*v*sqrt(sgt[id].tree)+v*v;
-    	else{
-    		push_down(id);
-    		int mid=(l+r)>>1;
-    		if(mid>=x)
-    			update(id<<1,l,mid,x,y,v);
-    		if(mid<y)
-    			update(id<<1|1,mid+1,r,x,y,v);
-    		push_up(id);
-    	}
-    }void update2(int id,int l,int r,int x,int y,int v){
-        if(l>=x&&r<=y)
-            sgt[id].tree=v*v;
-        else{
-            push_down(id);
-    		int mid=(l+r)>>1;
-    		if(mid>=x)
-    			update(id<<1,l,mid,x,y,v);
-    		if(mid<y)
-    			update(id<<1|1,mid+1,r,x,y,v);
-    		push_up(id);
-        }
-    }
-} // namespace sgtt
-using namespace sgtt;
-int n,prv[N],a[N],dp[N],been[N],minn,lst[N],nxt[N],pos[N],cnt[N],cntx;
-map<int,int> mp;
-int main(){
+const int N=1e4+10;
+#define int long long
+int t,x,m;
+signed main(){
 //ios::sync_with_stdio(0);
-    auto_init();
-    cin>>n;
-    for(int i=1;i<=n;++i)
-    {
-        cin>>a[i];
-        if(mp[a[i]]==0) 
-            mp[a[i]]=++cntx;
-        a[i]=mp[a[i]];
-        prv[i]=lst[a[i]];
-        nxt[lst[a[i]]]=i;
-        lst[a[i]]=i;
-        dp[i]=INT_MAX;
-        nxt[i]=n+1;
+    cin>>t;
+    while(t--){
+        cin>>x>>m;
+        int cnt=0;
+        for(int y=1;y<=minm(m,(x<<1));++y){
+            if(x!=y)
+                if(x%(x^y)==0||y%(x^y)==0)
+                    ++cnt;
+        }cout<<cnt<<'\n';
     }
-    long long maxn=ceil(sqrt(n));
-    for(int i=1;i<=maxn;++i)
-        pos[i]=1;
-    for(int i=1;i<=n;++i){
-        for(int j=1;j<=maxn;++j)
-        {
-            if(prv[i]<pos[j])
-                ++cnt[j]; 
-            if(cnt[j]>j)
-            {
-                --cnt[j];
-                while(nxt[pos[j]]<i)
-                    ++pos[j];
-                ++pos[j];
-            }
-            dp[i]=minm(dp[pos[j]-1]+j*j,dp[i]);
-        }
-    }
-     
-    cout<<dp[n];
 }
