@@ -62,9 +62,89 @@ namespace azcy{
 const int N=1e4+10;
 tree<int,null_type,less<int>,rb_tree_tag,tree_order_statistics_node_update> tr;
 mt19937 rnd(time(0));
+struct node{
+    int val,key,size,l,r,sum;
+}trp[N];
+int cnt,root,lastans,ans;
+int newnode(int v){
+    trp[++cnt].key=rnd();
+    trp[cnt].val=v;
+    trp[cnt].sum=v;
+    trp[cnt].size=1;
+    return cnt;
+}
+inline void update(int id){
+    trp[id].size=trp[trp[id].l].size+trp[trp[id].r].size+1;
+    trp[id].sum=trp[trp[id].l].sum+trp[trp[id].r].sum+trp[id].val;
+}
+void split(int id,int v,int &x,int &y){
+    if(!id) x=y=0;
+    else{
+        if(trp[id].size<=v){
+            x=id;
+            split(trp[id].r,v,trp[id].r,y);
+        }else{
+            y=id;
+            split(trp[id].l,v,x,trp[id].l);
+        }
+        update(id);
+    }
+}
+int merge(int a,int b){
+    if(!a||!b) return a+b;
+    if(trp[a].key>trp[b].key){
+        trp[a].r=merge(trp[a].r,b);
+        update(a);
+        return a;
+    }else{
+        trp[b].l=merge(a,trp[b].l);
+        update(b);
+        return b;
+    }
+    // throw runtime_error("RE___");   
+}void insert(int v){
+    int a,b;
+    split(root,v,a,b);
+    root=merge(merge(a,newnode(v)),b);
+}int query(int v){
+    int x,y,temp;
+    split(root,v-1,x,y);
+    temp=trp[x].size+1;
+    root=merge(x,y);
+    return temp;
+}int query2(int v){
+    int x,y,temp;
+    split(root,v-1,x,y);
+    temp=trp[x].sum;
+    root=merge(x,y);
+    return temp;
+}int getnum(int v){
+    int cur=root,temp=0;
+    while(cur){
+        if(trp[trp[cur].l].size+1==v) break;
+        if(trp[trp[cur].l].size>=v) cur=trp[cur].l;
+        else v-=trp[trp[cur].l].size+1,cur=trp[cur].r;
+    }
+    return trp[cur].sum;
+    // lastans=trp[cur].val;
+}void del(int v){
+    int a,b,c;
+    split(root,v,a,c);
+    split(a,v-1,a,b);
+    b=merge(trp[b].l,trp[b].r);
+    root=merge(merge(a,b),c);
+}
 int n,k,h[N];
 int main(){
 //ios::sync_with_stdio(0);
+    insert(3);
+    insert(4);
+    insert(5);
+    insert(5);
+    // insert(7);
+    insert(6);
+    cout<<getnum(3);
+    return 0;
     cin>>n>>k;
     for(int i=1;i<=n;++i)
         cin>>h[i];
