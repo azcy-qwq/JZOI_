@@ -12,7 +12,8 @@
                 "${fileDirname}\\${fileBasenameNoExtension}.exe",
                 "-Wall",
                 "-Wextra",
-                "-Wconversion"
+                "-Wconversion",
+                "-Wl,--stack=11451419"
             ],
             "options": {
                 "cwd": "C:/mingw64/bin"

@@ -1,96 +1,8 @@
 #include<bits/stdc++.h>
+#pragma GCC optimize(2)
+// #pragma comment (linker, "/STACK:1024000000,1024000000")
+// #pragma comment(linker, "/HEAP:2000000")
 using namespace std;
- 
-namespace IN {
-    #define MAX_INPUT 25000003
-    #define getc()(p1 == p2 && (p2 = (p1 = buf) + inbuf -> sgetn(buf, MAX_INPUT), p1 == p2) ? EOF : * p1++)
-    char buf[MAX_INPUT], * p1, * p2;
-    template < typename T > inline bool redi(T & x) {
-        static std::streambuf * inbuf = cin.rdbuf();
-        x = 0;
-        register int f = 0, flag = false;
-        register char ch = getc();
-        while (!std::isdigit(ch)) {
-            if (ch == '-') f = 1;
-            ch = getc();
-        }
-        if (std::isdigit(ch)) x = x * 10 + ch - '0', ch = getc(), flag = true;
-        while (std::isdigit(ch)) {
-            x = x * 10 + ch - 48;
-            ch = getc();
-        }
-        x = f ? -x : x;
-        return flag;
-    }
-    template < typename T, typename...Args > inline bool redi(T & a, Args & ...args) {
-        return redi(a) && redi(args...);
-    }
-    #undef getc
-}
- 
-namespace OUT {
-    template < typename T > inline void put(T x) {
-        static std::streambuf * outbuf = cerr.rdbuf();
-        static char stack[21];
-        static int top = 0;
-        if (x < 0) {
-            outbuf -> sputc('-');
-            x = -x;
-        }
-        if (!x) {
-            outbuf -> sputc('0');
-            outbuf -> sputc('\n');
-            return;
-        }
-        while (x) {
-            stack[++top] = x % 10 + '0';
-            x /= 10;
-        }
-        while (top) {
-            outbuf -> sputc(stack[top]);
-            --top;
-        }
-        outbuf -> sputc('\n');
-    }
-    inline void putc(const char ch) {
-        static std::streambuf * outbuf = cerr.rdbuf();
-        outbuf -> sputc(ch);
-    }
-    template < typename T > inline void put(const char ch, T x) {
-        static std::streambuf * outbuf = cerr.rdbuf();
-        static char stack[21];
-        static int top = 0;
-        if (x < 0) {
-            outbuf -> sputc('-');
-            x = -x;
-        }
-        if (!x) {
-            outbuf -> sputc('0');
-            outbuf -> sputc(ch);
-            return;
-        }
-        while (x) {
-            stack[++top] = x % 10 + '0';
-            x /= 10;
-        }
-        while (top) {
-            outbuf -> sputc(stack[top]);
-            --top;
-        }
-        outbuf -> sputc(ch);
-    }
-    template < typename T, typename...Args > inline void put(T a, Args...args) {
-        put(a);
-        put(args...);
-    }
-    template < typename T, typename...Args > inline void put(const char ch, T a, Args...args) {
-        put(ch, a);
-        put(ch, args...);
-    }
-}
-using IN::redi;
-using OUT::put;
-using OUT::putc;
 namespace azcy{
     using namespace std;
     bool debug_switch=1;
@@ -126,13 +38,81 @@ template<typename T>
         cerr << x << "\n";
     }
 }using namespace azcy;
-const int N=1e4+10;
-int c,t,n,m;
+const int N=1e5+10;
+const int T=1e5+2,F=-1e5-2,U=0;
+int c,t,n,m,a,b;
+char v;
+class M{
+    public:
+        int data[(N<<1)+10];
+        int& operator[](const int x){
+            return data[x+N];
+        }void clear(){
+            memset(data,0,sizeof(data));
+        }
+};
+M fa;
+// bitset<N*2> vis;
+int getfa(int id){
+    // if(vis[id]) return id;
+    if(fa[id]==-id) return -id;
+    if(fa[id]==id) return id;
+    // vis[id]=1;
+    return fa[id]=((fa[id]>0)?(getfa(fa[id])):(-getfa(-fa[id])));
+}
 int main(){
+    // qfopen("tribool2.in","tribool.out");
+    // freopen("tribool5.in","r",stdin);
+    auto_init();
 //ios::sync_with_stdio(0);
-
     cin>>c>>t;
     while(t--){
+        // vis.reset();
+        fa.clear();
+        int ans=0;
         cin>>n>>m;
+        for(int i=-n;i<=n;++i){
+            fa[i]=i;
+        }fa[T]=T,fa[F]=F,fa[0]=0;
+        for(int i=1;i<=m;++i){
+            cin>>v;
+            if(v=='T'){
+                cin>>a;
+                fa[a]=T;
+            }else if(v=='F'){
+                cin>>a;
+                fa[a]=F;
+            }else if(v=='U'){
+                cin>>a;
+                fa[a]=0;
+            }else if(v=='+'){
+                cin>>a>>b;
+                fa[a]=getfa(b);
+            }else if(v=='-'){
+                cin>>a>>b;
+                fa[a]=-getfa(b);
+            }
+        }for(int i=1;i<=n;++i){
+            // dbg(i,getfa(i));
+            if(getfa(i)==-i) 
+                fa[i]=U; 
+        }for(int i=1;i<=n;++i){
+            if(getfa(i)==U) ++ans;
+        }
+        cout<<ans<<"\n";
     }
 }
+/*
+1 1
+10 10
+- 9 8
+- 8 6
+- 6 5
+- 5 4
+- 4 3
++ 3 9
+- 1 2
++ 2 7
++ 7 10
+- 10 1
+*/

@@ -2,11 +2,11 @@
     "C_Cpp.legacyCompilerArgsBehavior": false,
     "files.associations": {
         "iostream": "cpp",
-<<<<<<< HEAD
         "iosfwd": "cpp",
-        "bitset": "cpp"
-=======
-        "iosfwd": "cpp"
->>>>>>> 5751b037be5fb24b353c0da7714075341131d7c4
+        "bitset": "cpp",
+        "memory": "cpp",
+        "random": "cpp",
+        "future": "cpp",
+        "optional": "cpp"
     }
 }
