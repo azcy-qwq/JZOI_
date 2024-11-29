@@ -1,5 +1,5 @@
 #include<bits/stdc++.h>
-#pragma GCC optimize(2)
+// #pragma GCC optimize(2)
 // #pragma comment (linker, "/STACK:1024000000,1024000000")
 // #pragma comment(linker, "/HEAP:2000000")
 using namespace std;
@@ -59,11 +59,17 @@ int getfa(int id){
     if(fa[id]==id) return id;
     // vis[id]=1;
     return fa[id]=((fa[id]>0)?(getfa(fa[id])):(-getfa(-fa[id])));
+}int getfa2(int id){
+    if(fa[id]==U||fa[id]==T||fa[id]==F) return id;
+    if(fa[id]==-id) return -id;
+    if(fa[id]==id) return id;
+    // vis[id]=1;
+    return fa[id]=((fa[id]>0)?(getfa(fa[id])):(-getfa(-fa[id])));
 }
 int main(){
     // qfopen("tribool2.in","tribool.out");
     // freopen("tribool5.in","r",stdin);
-    auto_init();
+    // auto_init();
 //ios::sync_with_stdio(0);
     cin>>c>>t;
     while(t--){
@@ -87,13 +93,16 @@ int main(){
                 fa[a]=0;
             }else if(v=='+'){
                 cin>>a>>b;
-                fa[a]=getfa(b);
+                fa[a]=getfa2(b);
             }else if(v=='-'){
                 cin>>a>>b;
-                fa[a]=-getfa(b);
-            }
-        }for(int i=1;i<=n;++i){
-            // dbg(i,getfa(i));
+                fa[a]=-getfa2(b);
+            }for(int i=-n;i<=n;++i)
+                dbg(i,getfa2(i));
+            dbg("_____________________");
+        }
+        for(int i=1;i<=n;++i){
+            dbg(i,getfa(i));
             if(getfa(i)==-i) 
                 fa[i]=U; 
         }for(int i=1;i<=n;++i){
@@ -105,14 +114,14 @@ int main(){
 /*
 1 1
 10 10
-- 9 8
-- 8 6
-- 6 5
-- 5 4
-- 4 3
-+ 3 9
-- 1 2
-+ 2 7
-+ 7 10
-- 10 1
+F 7
+- 10 4
+- 7 4
+U 6
++ 6 4
+U 4
+U 4
+- 7 10
+F 7
++ 4 1
 */
